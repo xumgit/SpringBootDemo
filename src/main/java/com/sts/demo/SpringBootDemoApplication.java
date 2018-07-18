@@ -6,9 +6,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 @MapperScan({"com.sts.demo.dao"})
-public class DemoSpringBootMybatisApplication {
+public class SpringBootDemoApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(DemoSpringBootMybatisApplication.class, args);
+		SpringApplication.run(SpringBootDemoApplication.class, args);
 	}
 }
