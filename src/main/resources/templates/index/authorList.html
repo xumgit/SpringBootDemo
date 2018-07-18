@@ -1,0 +1,31 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<title>authorList</title>
+</head>
+<body>
+	<div >
+		<table>
+		 <caption>authorLIst</caption>
+			<thead>
+				<tr>
+				    <th>number</th>
+				    <th>index</th>
+					<th>name</th>
+					<th>age</th>
+					<th>country</th>
+				</tr>
+			</thead>
+			<tbody th:remove="all-but-first">
+				<tr th:each="author,authorStat:${authorList}">
+				    <td th:text="${authorStat.count}">1</td>
+				    <td th:text="${authorStat.index}">0</td>
+					<td th:text="${author.name}">name</td>
+					<td th:text="${author.age}">age</td>
+					<td th:text="${author.country}">country</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</body>
+</html>
