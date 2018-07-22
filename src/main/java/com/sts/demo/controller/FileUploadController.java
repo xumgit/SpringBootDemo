@@ -1,11 +1,15 @@
 package com.sts.demo.controller;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,7 +33,7 @@ public class FileUploadController {
         return "fileupload/file";
     }
 	
-	@RequestMapping("/fileUpload")
+	@RequestMapping(value="/fileUpload")
     @ResponseBody 
     public String fileUpload(@RequestParam("fileName") MultipartFile file, HttpServletRequest request){
         if(file.isEmpty()){
@@ -82,7 +86,7 @@ public class FileUploadController {
         }
     }
 
-    @RequestMapping("/multifile")
+    @RequestMapping(value="/multifile")
     public String multifile(){
         return "fileupload/multifile";
     }
@@ -147,6 +151,74 @@ public class FileUploadController {
             }
         }
         return "true";
+    }
+    
+    @RequestMapping(value = "/download")
+    public String downLoad(HttpServletResponse response){
+        String filename = "2.png";
+        
+        String path = "";
+        try {
+			String root = ResourceUtils.getURL("classpath:").getPath();
+			LOG.info("root="+root);
+			File rootFile = new File(root);
+			if(!rootFile.exists()) {
+				rootFile = new File("");
+			}
+			LOG.info("rootFile="+rootFile.getAbsolutePath());
+			File upload = new File(rootFile.getAbsolutePath(),"static/upload/");
+			if(!upload.exists()) {
+				upload.mkdirs();
+			}
+			LOG.info("download url="+upload.getAbsolutePath());
+			path = upload.getAbsolutePath();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			LOG.error(e.getMessage(), e);
+		}
+        
+        LOG.info("path="+path);
+        if (path == "") { 
+        	 	return null;
+        }
+        
+        File file = new File(path + "/" + filename);
+        if(file.exists()){ //判断文件父目录是否存在
+            response.setContentType("application/force-download");
+            response.setHeader("Content-Disposition", "attachment;fileName=" + filename);
+            
+            byte[] buffer = new byte[1024];
+            FileInputStream fis = null; //文件输入流
+            BufferedInputStream bis = null;
+            
+            OutputStream os = null; //输出流
+            try {
+                os = response.getOutputStream();
+                fis = new FileInputStream(file); 
+                bis = new BufferedInputStream(fis);
+                int i = bis.read(buffer);
+                while(i != -1){
+                    os.write(buffer);
+                    i = bis.read(buffer);
+                }
+                
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            LOG.info("----------file download" + filename);
+            try {
+                bis.close();
+                fis.close();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        } else {
+        		LOG.info(filename +" is not exist");
+        }
+        return null;
     }
 	
 }
