@@ -1,5 +1,7 @@
 package com.sts.demo.controller;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,10 +31,27 @@ public class IndexController {
 	@Autowired
 	private AuthorService authorService;
 	
-//	@RequestMapping("/index")
-//	public String index() {
-//		return "index";
-//	}
+	@RequestMapping("/index")
+	public String index() {
+		try {
+			String root = ResourceUtils.getURL("classpath:").getPath();
+			LOG.info("root="+root);
+			File pathFile = new File(root);
+			if(!pathFile.exists()) {
+				pathFile = new File("");
+			}
+			LOG.info("pathFile="+pathFile.getAbsolutePath());
+			File upload = new File(pathFile.getAbsolutePath(),"static/upload/");
+			if(!upload.exists()) {
+				upload.mkdirs();
+			}
+			LOG.info("upload url="+upload.getAbsolutePath());
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "index/index";
+	}
 	
 	@RequestMapping("/author")
 	public String getAuthorInfo(ModelMap model) {
