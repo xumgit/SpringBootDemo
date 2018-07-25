@@ -53,7 +53,65 @@ public class IndexController {
 		return "index/index";
 	}
 	
-	@RequestMapping("/author")
+	@RequestMapping(value="/saveAuthor")
+	@ResponseBody
+	public String saveAuthor(@RequestParam(value="id", required=true) Integer id,
+			@RequestParam(value="name", required=false) String name,
+			@RequestParam(value="age", required=false) Integer age, 
+			@RequestParam(value="email", required=false) String email,
+			@RequestParam(value="country", required=false) String country, 
+			@RequestParam(value="clone", required=false) String clone) {
+		String status = "{\"status\":\"success\"}";
+		Author author = new Author();
+		if (id != null) {author.setId(id);}
+		if (name != null) {author.setName(name);}
+		if (age != null) {author.setAge(age);}
+		if (email != null) {author.setEmail(email);}
+		if (country != null) {author.setCountry(country);}
+		if (clone != null) {author.setClone(clone);}
+		int affectRow = authorService.updateByPrimaryKeySelective(author);
+		if (affectRow > 0) {
+			status = "{\"status\":\"success\"}";
+		} else {
+			status = "{\"status\":\"failed\"}";
+		}
+		return status;
+	}
+	
+	@RequestMapping(value="/getAuthor", method = RequestMethod.GET)
+	@ResponseBody
+	public String getAuthor() {
+		StringBuilder data = new StringBuilder();
+		data.append("{\"data\":");
+		data.append("[");
+		
+		List<Author> authorList = authorService.selectAllByList();
+		int authorSize = authorList.size();
+		StringBuilder authorItem = new StringBuilder();
+		if (authorSize > 0) {			
+			for (int i = 0; i < authorSize; i++) {
+				authorItem.append("{");
+				authorItem.append("\"id\":\"" + authorList.get(i).getId() + "\",");
+				authorItem.append("\"name\":\"" + authorList.get(i).getName() + "\",");
+				authorItem.append("\"age\":\"" + authorList.get(i).getAge() + "\",");
+				authorItem.append("\"email\":\"" + authorList.get(i).getEmail() + "\",");
+				authorItem.append("\"country\":\"" + authorList.get(i).getCountry() + "\",");
+				authorItem.append("\"clone\":\"" + authorList.get(i).getClone() + "\"");
+				authorItem.append("},");
+			}
+		}
+		String authorItemString = authorItem.toString();
+		if (authorItemString.length() > 0) {
+			authorItemString = authorItemString.substring(0, authorItemString.length() - 1);
+		}
+		data.append(authorItemString);
+		
+		data.append("]");
+		data.append("}");
+		return data.toString();
+	}
+	
+	@RequestMapping(value="/author")
 	public String getAuthorInfo(ModelMap model) {
 		List<Author> authorList = authorService.selectAllByList();
 		model.addAttribute("authorList", authorList);
@@ -116,12 +174,14 @@ public class IndexController {
 			for (Map.Entry<String, Object> entry : kv.entrySet()) {
 				jsonObj.addProperty(entry.getKey(), String.valueOf(entry.getValue()));
 			}
+			jsonObj.addProperty("add", "{\"country\":\"China\",\"name\":\"rrrrr\",\"clone\":\"\",\"id\":\"3\",\"age\":\"37\",\"email\":\"ww@278.com\"}");
 			array.add(jsonObj);
 		}
 		data.addProperty("current", current);
 		data.addProperty("rowCount", rowCount);
 		data.addProperty("total", total);
 		data.add("rows", array);
+		
 		LOG.info("data="+data.toString());
 		
 		return data.toString();
