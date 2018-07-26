@@ -174,7 +174,12 @@ public class IndexController {
 			for (Map.Entry<String, Object> entry : kv.entrySet()) {
 				jsonObj.addProperty(entry.getKey(), String.valueOf(entry.getValue()));
 			}
-			jsonObj.addProperty("add", "{\"country\":\"China\",\"name\":\"rrrrr\",\"clone\":\"\",\"id\":\"3\",\"age\":\"37\",\"email\":\"ww@278.com\"}");
+			String dataTest = "[";
+			dataTest += "{\"country\":\"China\",\"name\":\"aa\",\"clone\":\"\",\"id\":\"1\",\"age\":\"17\",\"email\":\"ww@178.com\"},";
+			dataTest += "{\"country\":\"China\",\"name\":\"bb\",\"clone\":\"\",\"id\":\"2\",\"age\":\"27\",\"email\":\"ww@278.com\"},";
+			dataTest += "{\"country\":\"China\",\"name\":\"cc\",\"clone\":\"\",\"id\":\"3\",\"age\":\"37\",\"email\":\"ww@378.com\"}";
+			dataTest += "]";
+			jsonObj.addProperty("add", dataTest);
 			array.add(jsonObj);
 		}
 		data.addProperty("current", current);

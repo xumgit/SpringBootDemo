@@ -20,7 +20,7 @@ $(function(){
 	    formatters: {
 	    	"add": function(column, row)
 	    	{
-	    		return "<span class=\"glyphicons glyphicons-plus\"></span>"+"<button id=\"expland_" + row.id + "\" data=" + row.add + " row-id=\"" + row.id +"\">" + "Expland" + "</button>";
+	    		return "<button id=\"expland_" + row.id + "\" class=\"expland_" + row.id + "\" data=" + row.add + " row-id=\"" + row.id +"\">" + '<span class="glyphicon glyphicon-plus" style="color:blue;font-size:14px;"></span>' + "</button>";
 	    	},
 	        "email": function(column, row)
 	        {
@@ -30,15 +30,23 @@ $(function(){
 	}).on("loaded.rs.jquery.bootgrid",function(){
 	    console.log("loaded");
 	    
-		/*$("[id^=expland_]").each(function(index, element){
+	    $("[class^=content_]").each(function(index, element){
+			$(this).remove();
+		});
+	    
+		$("[id^=expland_]").each(function(index, element){
 			addRow(this);
-		});*/
+		});
 	    
 	    $("#grid-data").find("[id^=expland_]").on('click', function(e){
-	    	if ($(this).text() == "Expland") {
+	    	var rowId = $(this).attr("row-id");
+	    	if ($(this).hasClass("expland_"+rowId)) {
 	    		addRow(this);
 	    	} else {
-	    		$(this).text("Expland");
+	    		$(this).removeClass("collapse_"+rowId);
+	    		$(this).addClass("expland_"+rowId);
+	    		$(this).find("span").remove();
+	    		$(this).append('<span class="glyphicon glyphicon-plus" style="color:blue;font-size:14px;"></span>');
      			$(".content_" + $(this).attr("row-id")).each(function(index, element){
      				$(this).css("display", "none");
      			});
@@ -55,34 +63,39 @@ $(function(){
 		var rowId = $(obj).attr("row-id");
     	var data = $(obj).attr("data");
     	var jsonConfig = $.parseJSON(data);
-    	$(obj).text("Collapse");
-    	var html = "";
-    	html += "<tr class=\"content_" + rowId + "\">" 
-	      + "<td class=\"text-left\">" + "" + "</td>"
-		  + "<td class=\"text-left\">" + jsonConfig.id + "_test" + "</td>"
-		  + "<td class=\"text-left\">" 
-		  + "<input type=\"text\" style=\"border:0px solid #dddddd;background: none repeat scroll 0 0 ;\"" +
-		  	" onchange=\"nameChange(this)\" data='" + data + "' orgName=\"" + jsonConfig.name + "\" row-id=\"" + rowId + "\" value=\"" + jsonConfig.name + "\">" 
-		  + "</input></td>"
-		  + "<td class=\"text-left\">" + jsonConfig.age + "</td>"
-		  + "<td class=\"text-left\">" + jsonConfig.email + "</td>"
-		  + "<td class=\"text-left\">" + jsonConfig.country + "</td>"
-		  + "<td class=\"text-left\">" + jsonConfig.clone + "</td>"
-		  + "</tr>";
-    	$("tbody tr").each(function(index, element){
-			if ($(this).find("td:eq(1)").text() == rowId) {
-				$(this).find("td:eq(1)").parent().after(html);
-				return false;
-			}
-		});
+    	$(obj).removeClass("expland_"+rowId);
+    	$(obj).addClass("collapse_"+rowId);
+    	$(obj).find("span").remove();
+    	$(obj).append('<span class="glyphicon glyphicon-minus" style="color:blue;font-size:14px;"></span>');
+    	for (var i=0;i<jsonConfig.length;i++){
+    		var html = "";
+    		html += "<tr class=\"content_" + rowId + "\">" 
+  	      	+ "<td class=\"text-left\">" + "" + "</td>"
+  	      	+ "<td class=\"text-left\">" + jsonConfig[i].id + "_test" + "</td>"
+  	      	+ "<td class=\"text-left\">" 
+  	      	+ "<input type=\"text\" style=\"border:0px solid #dddddd;background: none repeat scroll 0 0;\"" +
+  		  		" onchange=\"nameChange(this)\" index=\"" + i + "\" data='" + data + "' orgName=\"" + jsonConfig[i].name + "\" row-id=\"" + rowId + "\" value=\"" + jsonConfig[i].name + "\">" 
+  		  	+ "</input></td>"
+  		  	+ "<td class=\"text-left\">" + jsonConfig[i].age + "</td>"
+  		  	+ "<td class=\"text-left\">" + jsonConfig[i].email + "</td>"
+  		  	+ "<td class=\"text-left\">" + jsonConfig[i].country + "</td>"
+  		    + "<td class=\"text-left\">" + jsonConfig[i].clone + "</td>"
+  		    + "</tr>";
+    		$("#grid-data tbody tr").each(function(index, element){
+    			if ($(this).find("td:eq(1)").text() == rowId) {
+    				$(this).find("td:eq(1)").parent().after(html);
+    				return false;
+    			}
+    		});
+    	}
+    	
 	}
 	
 	nameChange = function(obj){	
 		
 		var newname = $(obj).val();
 		var oldname = $(obj).attr("orgName");
-		var rowId = $(obj).attr("row-id");
-		console.log("newname="+newname+",oldname="+oldname+",rowId="+rowId);					
+		var rowId = $(obj).attr("row-id");			
 		newname = newname.replace(/^\s+|\s+$/g,'');
 		oldname = oldname.replace(/^\s+|\s+$/g,'');	
 		var numericReg =/[\/\\:*?\"<>|]/g; 
@@ -92,10 +105,12 @@ $(function(){
  			return false;
 		}
 		
+		var index = $(obj).attr("index");
 		var data = $(obj).attr("data");
 		var jsonConfig = $.parseJSON(data);
-    	jsonConfig.name = newname;
+    	jsonConfig[index].name = newname;
     	$("#expland_"+rowId).attr("data", JSON.stringify(jsonConfig));
+    	$(obj).attr("data", JSON.stringify(jsonConfig));
     	
 		$.ajax({
 			type: 'POST',
