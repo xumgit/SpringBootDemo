@@ -192,4 +192,9 @@ public class IndexController {
 		return data.toString();
 	}
 	
+	@RequestMapping(value="/detect")
+	public String detectTest() {
+		return "index/detect";
+	}
+	
 }

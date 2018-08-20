@@ -3,6 +3,20 @@
  */
 
 $(function(){
+	$("#detect").click(function(){
+		$.ajax({
+			type: "GET",
+			dataType: "json",
+			url: "/index/detectTest",
+			success: function(data){
+				
+			}
+		});
+	});
+});
+
+
+$(function(){
 	var grid_devices_data = $("#grid-data").bootgrid({
 	    ajax: true,
 	    rowCount: [5, 10, 15, 20],
