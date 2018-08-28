@@ -1,5 +1,9 @@
 package com.sts.demo.common;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -14,6 +18,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.stream.Collectors;
 
 import org.apache.commons.net.util.SubnetUtils;
 import org.apache.logging.log4j.LogManager;
@@ -24,15 +29,17 @@ public class Scan {
 	private static final Logger LOG = LogManager.getLogger(Scan.class);
 	private final int ThreadPoolSize = 30;
 	private ExecutorService executorService;
+	private final int port = 9080;
+	private final int timeout = 500;
 	
-	public boolean detect() {
+	public String detect() {		
 		boolean result = false;
-		
+		String status = "{\"status\":\"" + result + "\"}";
 		try {
 			executorService = Executors.newFixedThreadPool(ThreadPoolSize);
 			Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
 			if (networkInterfaces == null || !networkInterfaces.hasMoreElements()){
-				return result;
+				return status;
 			}
 			while (networkInterfaces.hasMoreElements()){
 				NetworkInterface networkInterface = networkInterfaces.nextElement();
@@ -69,17 +76,20 @@ public class Scan {
                     String highAddress = subnetInfo.getHighAddress();
                     int lowAddr = Integer.parseInt(lowAddress.split("\\.")[3]);
                     int highAddr = Integer.parseInt(highAddress.split("\\.")[3]);
-                    LOG.info("subnet="+subnet+" |lowAddr="+lowAddr + " |highAddr=" +highAddr);
-                    //result = scanner(scannerInput, networkPrefixLength, lowAddr, highAddr, port, timeout, networkInterface.getDisplayName(), hostAddress);
-  
+                    LOG.info("subnet=" + subnet + " |lowAddr=" + lowAddr + " |highAddr=" + highAddr);
+                    if (subnet.startsWith("127.0")) {
+                    	continue;
+                    }
+                    result = scanner(scannerInput, networkPrefixLength, lowAddr, highAddr, port, timeout, networkInterface.getDisplayName(), hostAddress);
 				}
 			}
 			
 		} catch (Exception e) {
 			LOG.error(e.getMessage(), e);
 		}
+		status = "{\"status\":\"" + result + "\"}";
 		
-		return result;
+		return status;
 	}
 	
 	private boolean scanner(String subnet, short networkPrefixLength, int lowAddr, int highAddr, int port, int timeout, String networkInterfaceDisplayName, String hostAddress) {
@@ -93,15 +103,43 @@ public class Scan {
 				result =  true;
 			}
 		}*/
+		for (String ip:ipAddressesList) {
+			LOG.info("ip="+ip);
+		}
 		
+		result = true;
 		return result;
-
 	}
 	
+	@SuppressWarnings("unchecked")
 	private List<String> listIpAddresses(String subnet, short networkPrefixLength, int lowAddr, int highAddr, int port, int timeout) {
-		List ipAddressesList = null;
-
-		try {
+		//List ipAddressesList = null;
+		
+		final List<Future<String>> ipFutureList = new ArrayList<>();
+		String[] subnetArr = subnet.split("\\.");
+		String subnetPrefix = subnetArr[0] + "." + subnetArr[1] + "." + subnetArr[2];
+		//String ip = "";
+		for (int hostId = lowAddr; hostId <= highAddr; hostId++) {
+			final String ip = subnetPrefix + "." + hostId;
+			final Future<String> ipFuture = isListeningBy(ip, port, timeout);
+			ipFutureList.add(ipFuture);
+		}
+		
+		return ipFutureList.stream()
+                .map(ipFuture -> {
+                    String ip = null;
+                    try {
+                        ip = ipFuture.get();
+                    } catch (final InterruptedException | ExecutionException e) {
+                        final String message = e.getMessage();
+                        LOG.error(message, e);
+                    }
+                    return ip;
+                })
+                .filter(ip -> ip != null)
+                .collect(Collectors.toList());
+		
+		/*try {
 			Future ipAddressesListFuture = executorService.submit(new ListIpAddressesCallable(subnet, networkPrefixLength, lowAddr, highAddr, port, timeout));
 			ipAddressesList = (List) ipAddressesListFuture.get();
 		} catch (InterruptedException e) {
@@ -113,9 +151,9 @@ public class Scan {
 		} catch (Exception e) {
 			// TODO: handle exception
 			LOG.error(e.getMessage(), e);
-		}
+		}*/
 		
-		return ipAddressesList;
+		//return ipAddressesList;
 	}
 	
 
@@ -162,21 +200,48 @@ public class Scan {
 		}
 	}
 	
+	private Future<String> isListeningBy(final String ip, final int port, final int timeout) {
+		
+        return this.executorService.submit(() -> {
+            Socket socket = null;
+            try {
+                socket = new Socket();
+                final InetSocketAddress inetSocketAddress = new InetSocketAddress(ip, port);
+                socket.connect(inetSocketAddress, timeout);
+                return ip;
+            } catch (final Exception ex) {
+                return null;
+            } finally {
+                try {
+                    if (socket != null) {
+                        socket.close();
+                    }
+                } catch (Exception e) {
+                    // ignore
+                }
+            }
+        });
+
+    }
+	
 	private String isListening(String ip, int port, int timeout) {
-		Socket socket = null;
+		if(ping(ip)) {
+    		return ip;
+    	} else {
+    		return null;
+    	}
+		/*Socket socket = null;
         try {
             socket = new Socket();
             LOG.info("before socket connect ip="+ip);
             InetSocketAddress inetSocketAddress = new InetSocketAddress(ip, port);
             socket.connect(inetSocketAddress, timeout);
-            //no exception, then return ip
             LOG.info("after socket connect ip="+ip);
             return ip;
-        }catch (Exception e) {
-        	//e.printStackTrace();
+        } catch (Exception e) {
         	LOG.info("failed socket connect ip="+ip);
         	return null;
-        }finally {
+        } finally {
             try {
                 if (socket != null) {
                     socket.close();
@@ -184,7 +249,68 @@ public class Scan {
             } catch (Exception e) {
             	e.printStackTrace();
             }
-        }
+        }*/
+	}
+	
+	private boolean ping(String ipaddress) {		
+		boolean is = false;	
+		
+		String command = ipaddress;			
+		ProcessBuilder pb = new ProcessBuilder("ping ", command);
+		Process process;
+		try {
+			process = pb.start();
+			try(BufferedReader stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));) {							
+				while ((command = stdInput.readLine()) != null) {		
+					if(command.contains("Average =")) {					
+						is = true;
+						break;				
+					} else if(command.contains("Lost = 4")) {
+						//NO_RESPONSE				
+					} else if(command.contains("could not find host")) {				
+						//NO_RESPONSE
+					}		
+				}			
+			} catch (IOException ioe) {			
+				LOG.error(ioe.getMessage(), ioe);						
+			}
+		
+		} catch (IOException e) {
+			LOG.error(e.getMessage(), e);
+		}
+		
+		return is;
+	}
+	
+	private boolean checkPingCommand(String ipaddress) {
+		
+	    Runtime runtime = Runtime.getRuntime();
+	    String cmds = "ping "+ipaddress;
+	    //LOG.info(cmds);
+	    Process proc;
+	    
+	    try {
+			proc = runtime.exec(cmds);
+			proc.getOutputStream().close();
+		
+		    try(InputStream inputstream = proc.getInputStream();
+			    InputStreamReader inputstreamreader = new InputStreamReader(inputstream);
+			    BufferedReader bufferedreader = new BufferedReader(inputstreamreader);) {
+		       
+		        String line;
+		        while ((line = bufferedreader.readLine()) != null) {
+		            if(line.contains("Reply from "+ipaddress+":")) {
+		                return true;    
+		            }
+		        }
+		    }catch (IOException e) {
+		    	LOG.error(e.getMessage(), e);
+		    }
+	    
+	    } catch (IOException e1) {
+	    	LOG.error(e1.getMessage(), e1);
+		}
+	    return false;
 	}
 		
 }

@@ -4,12 +4,15 @@
 
 $(function(){
 	$("#detect").click(function(){
+		$("#loading").css("display","");
 		$.ajax({
 			type: "GET",
 			dataType: "json",
-			url: "/index/detectTest",
+			url: "/index/detect",
 			success: function(data){
-				
+				$("#loading").css("display","none");
+				console.log("status="+data.status);
+				$("#detectResult").text(data.status).css({"color":"red"});
 			}
 		});
 	});

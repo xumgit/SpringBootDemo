@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.sts.demo.common.Scan;
 import com.sts.demo.pojo.Author;
 import com.sts.demo.service.AuthorService;
 
@@ -192,9 +193,23 @@ public class IndexController {
 		return data.toString();
 	}
 	
-	@RequestMapping(value="/detect")
+	@RequestMapping(value="/showDetect")
 	public String detectTest() {
 		return "index/detect";
 	}
 	
+	@RequestMapping(value="/detect")
+	@ResponseBody
+	public String authorBootGrid() {
+		long startTime = System.currentTimeMillis();
+		Scan scan = new Scan();
+		String data = scan.detect();
+		long endTime = System.currentTimeMillis();
+		
+		long consumeTime = endTime - startTime;
+		
+		LOG.info("data="+data + ",consumeTime=" + consumeTime/1000 + "s");
+		
+		return data;
+	}
 }
