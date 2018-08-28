@@ -3,6 +3,23 @@
  */
 
 $(function(){
+	$("#detect").click(function(){
+		$("#loading").css("display","");
+		$.ajax({
+			type: "GET",
+			dataType: "json",
+			url: "/index/detect",
+			success: function(data){
+				$("#loading").css("display","none");
+				console.log("status="+data.status);
+				$("#detectResult").text(data.status).css({"color":"red"});
+			}
+		});
+	});
+});
+
+
+$(function(){
 	var grid_devices_data = $("#grid-data").bootgrid({
 	    ajax: true,
 	    rowCount: [5, 10, 15, 20],
