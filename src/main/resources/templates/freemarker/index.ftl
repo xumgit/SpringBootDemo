@@ -20,15 +20,30 @@
         </p>      
        <h4>我的好友：</h4>  
        <#list friends as item>  
-               姓名：${item.name} , 年龄${item.age}  
+               索引: ${item_index + 1} , 姓名：${item.name} , 年龄${item.age}  
            <br />  
        </#list>  
+      	${friends[0].name} <---> ${friends[0].age} <br />
+      	<#--<#list friends?keys as key> 
+      		${key}:${friends[key]}<br/> 
+      	</#list>-->
+      	<#list ["星期一"," 星期二","星期三"]+["星期四","星期五"] as x>
+           ${x} <br />
+        </#list>
+        ${var?default("hello world")} <br />
        </center>
        <div>
        <#--https://www.cnblogs.com/xumBlog/p/9550530.html-->
        	<center>
        		<#setting number_format="number"/>
-			<#assign answer=42/>
+			<#assign answer=4/>
+			<#if answer gt 5>  
+                  <div style="color:red">大于5</div>  
+           	<#elseif answer==5>  
+                  <div style="color:red">等于5</div>  
+           	<#elseif answer lt 5>  
+                  <div style="color:red">小于5</div>    
+           	</#if>
 			<span>answer:</span>${answer} <br />
 			<span>answer(String):</span>${answer?string} <#-- the same as ${answer} --> <br />
 			<span>answer(Number):</span>${answer?string.number} <br />
@@ -41,6 +56,21 @@
       		${lastUpdated?string("EEEE,MMMM dd,yyyy,hh:mm:ss a '('zzz')'")} <br />
       		${lastUpdated?string.short} <br />
       		${lastUpdated?string.long} <br />
+      		<#assign test="no"/>
+      		<#switch test>
+           		<#case "yes">
+              		<div style="color:red">yes</div>
+              	<#break>
+           		<#case "no">
+             		<div style="color:red">no</div>
+              	<#break>
+           		<#default>
+              		<div>default</div>
+       		</#switch>
+       		<#list ["星期一","星期二","星期三","星期四","星期五"] as x>
+          		${x_index +1}.${x} <#if x_has_next>,</#if>
+          		<#if x = "星期四"><#break></#if> <br />
+      		</#list>
        	</center>	
        </div>
        <div>
