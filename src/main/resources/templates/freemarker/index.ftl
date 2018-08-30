@@ -24,9 +24,9 @@
            <br />  
        </#list>  
       	${friends[0].name} <---> ${friends[0].age} <br />
-      	<#--<#list friends?keys as key> 
-      		${key}:${friends[key]}<br/> 
-      	</#list>-->
+      	<#list m?keys as key>
+ 			${key}:${m[key]} <br />
+		</#list>
       	<#list ["星期一"," 星期二","星期三"]+["星期四","星期五"] as x>
            ${x} <br />
         </#list>
@@ -71,10 +71,30 @@
           		${x_index +1}.${x} <#if x_has_next>,</#if>
           		<#if x = "星期四"><#break></#if> <br />
       		</#list>
+      		<#assign var = 5/> <br />
+      		<#switch var> 
+      			<#case 1>
+      				星期一 <#break> 
+      			<#case 2>
+      				星期二 <#break> 
+      			<#case 3>
+      				星期三 <#break> 
+      			<#case 4>
+      				星期四 <#break> 
+      			<#case 5>
+      				星期五 <#break> 
+      			<#case 6>
+      				星期六 <#break> 
+      			<#case 7>
+      				星期日 <#break> 
+      			<#default>
+      				无效的星期 
+      		</#switch> <br />
        	</center>	
        </div>
        <div>
        	<#assign str = "abcdefghijklmn"/>
+       	<span>str length:</span> ${str?length} <br />
        	${str}  <br />
 		${str?substring(0,4)}  <br />
 		${str[0]}${str[4]}    <br />
@@ -88,7 +108,7 @@
 		<#assign foo=true/> <br />
 		${foo?string("yes","no")} <br />
 		<#assign week = ["first", "second", "third", "four", "five", "six", "seven"]>
-		${week?size} <br />
+		<span>week size:</span>${week?size} <br />
 		<#list week! as we> 
     			${we_index + 1}-${we} <br />
     			<#if (we="third" || we_index = 3)><#break></#if>

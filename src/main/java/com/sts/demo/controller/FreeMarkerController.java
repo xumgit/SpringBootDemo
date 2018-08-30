@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping(value="/freemarker")
 public class FreeMarkerController {
 
-	@RequestMapping("/index")
+	@RequestMapping(value="/index")
 	public String index(Map<String, Object> map) {
 		map.put("name", "Test");
 		map.put("sex", 1); 
@@ -26,7 +26,19 @@ public class FreeMarkerController {
         friend.put("age", 18);
         friends.add(friend);
         map.put("friends", friends);
+        
+        Map<String, Object> m = new HashMap<String, Object>();
+        m.put("name", "test");
+        m.put("age", 19);
+        m.put("height", "175cm");
+        map.put("m", m);
+        
         return "freemarker/index";
+	}
+	
+	@RequestMapping(value="/test")
+	public String test(Map<String, Object> map) {	
+		return "freemarker/test";
 	}
 	
 }
