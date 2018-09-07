@@ -150,5 +150,40 @@
 			</ul> 
 		</div> 
 	</div>
+	<hr size="10" color="blue"> 
+	<div>
+		macro, nested, return 用法
+	</div>
+	<#macro test foo bar="Bar" baaz=-1> 
+  		Test text, and the params: ${foo}, ${bar}, ${baaz} 
+	</#macro> 
+	<@test foo="a" bar="b" baaz=5*5-2/>  <br />
+	<@test foo="a" bar="b"/>  <br />
+	<@test foo="a" baaz=5*5-2/>  <br />
+	<@test foo="a"/>  <br />
+	<div>
+		定义循环输出的宏 
+	</div>
+	<#macro list title items> 
+  		<p>${title?cap_first}: </p>
+  		<ul> 
+   	 		<#list items as x> 
+      			<li>${x?cap_first}</li>
+    		</#list> 
+  		</ul> 
+	</#macro>
+	<@list items=["mouse", "elephant", "python"] title="Animals"/> 
+	<div>
+		包含body的宏 
+	</div>
+	<#macro repeat count> 
+  		<#list 1..count as x> 
+    		<#nested x, x/2, x==count> 
+  		</#list> 
+	</#macro> 
+	<@repeat count=4; c,halfc,last> 
+  		${c}. ${halfc} <br />
+  		<#if last> Last!</#if> <br /> 
+	</@repeat>
 </body>  
 </html>
