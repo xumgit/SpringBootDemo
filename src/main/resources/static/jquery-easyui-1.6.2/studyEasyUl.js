@@ -3,13 +3,18 @@ $(document).ready(function(){
 	// datagrid test
     $('#myEasyui').datagrid({
         //width: 400,                 //设置宽度
-        //url: 'content.json',       //远程加载数据地址
+        url: '/easyui/getAuthor',       //远程加载数据地址
         title: '用户列表',           //面板属性，添加标题
         iconCls: 'icon-search',     //添加图标
         columns: [[                 //设置要显示表格数据
             {
-                field: 'user',      //field，对应远程JSON 数据里的对象属性，也就是数据库字段
-                title: '帐号',      //title，定义数据的标题
+                field: 'name',      //field，对应远程JSON 数据里的对象属性，也就是数据库字段
+                title: '姓名',      //title，定义数据的标题
+				halign:'center'
+            },
+            {
+                field: 'age',      //field，对应远程JSON 数据里的对象属性，也就是数据库字段
+                title: '年龄',      //title，定义数据的标题
 				halign:'center'
             },
             {
@@ -18,17 +23,17 @@ $(document).ready(function(){
 				halign:'center'
             },
             {
-                field: 'date',      //field，对应远程JSON 数据里的对象属性，也就是数据库字段
-                title: '注册时间',   //title，定义数据的标题
+                field: 'country',      //field，对应远程JSON 数据里的对象属性，也就是数据库字段
+                title: '国家',   //title，定义数据的标题
 				halign:'center'
             }
         ]],
 		pagination: true,
 		pageNumber: 1,             //设置分页时初始化页码
-        pageSize: 3,               //设置分页时设置每页多少条
-        pageList: [3,6,9],          //设置可选每页显示条数
+        pageSize: 5,               //设置分页时设置每页多少条
+        pageList: [5,10,15],          //设置可选每页显示条数
 		pagePosition: 'bottom',
-		sortName: 'date',        //设置哪些列可以进行排序。默认为 null。值为field的值也就是可以排序的字段，这个值会发送到数据库
+		sortName: 'country',        //设置哪些列可以进行排序。默认为 null。值为field的值也就是可以排序的字段，这个值会发送到数据库
         sortOrder: 'DESC',        //设置列排序的顺序,ASC 和 DESC，默认是 ASC。这个值会发送到数据库
 		queryParams:{           //设置请求远程数据发送的额外数据
             id: 1

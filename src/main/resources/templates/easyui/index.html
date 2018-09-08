@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>EasyUI</title>
+<link rel="stylesheet" type="text/css" href="/jquery-easyui-1.6.2/themes/bootstrap/easyui.css">
+<link rel="stylesheet" type="text/css" href="/jquery-easyui-1.6.2/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="/jquery-easyui-1.6.2/themes/color.css">
+<script type="text/javascript" src="/jquery-easyui-1.6.2/jquery.min.js"></script>
+<script type="text/javascript" src="/jquery-easyui-1.6.2/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="/jquery-easyui-1.6.2/studyEasyUl.js"></script>
+<style type="text/css">
+body,div#nav-tabs,table.easyui-datagrid {
+    padding: 0px;
+    margin: 0px;
+}
+</style>
+</head>
+<body>
+	<div class="easyui-tabs" id="nav-tabs" data-options="tools:'#tab-tools'">
+		<div title="About" style="padding:10px">
+			<table id="boxTable"></table>
+		</div>
+		<div title="My Documents" style="padding:10px">
+			<table id="myEasyui"></table>
+		</div>
+		<div title="Help" data-options="iconCls:'icon-help',closable:true" style="padding:10px">
+			<p>Help content</p>
+		</div>
+	</div>
+	<div id="tab-tools">
+		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-add'" onclick="addPanel()"></a>
+		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-remove'" onclick="removePanel()"></a>
+	</div>
+</body>
+</html>
