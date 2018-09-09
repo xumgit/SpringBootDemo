@@ -1,0 +1,35 @@
+@charset "UTF-8";
+
+body,div#nav-tabs,table.easyui-datagrid {
+    padding: 0px;
+    margin: 0px;
+}
+
+div#userlist tr.datagrid-header-row td{
+	margin: 0px;
+	padding: 0px;
+}
+
+.tdContent {
+	background-color: #333333;
+	/*width: 30%;*/
+}
+
+#tb{
+    padding:5px;
+}
+
+#gjl2{
+    padding: 5px;
+}
+
+.textbox {
+    height: 20px;
+    margin: 0;
+    padding: 0 2px;
+    box-sizing: content-box;
+}
+
+.chx{
+    margin: 0 0 0 20px;
+}

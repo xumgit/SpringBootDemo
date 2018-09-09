@@ -33,12 +33,13 @@ public class EasyUIController {
 	
 	@RequestMapping(value="/getAuthor")
 	@ResponseBody
-	public String getAuthor(@RequestParam(value="id", required=true, defaultValue="1") Integer id,
+	public String getAuthor(@RequestParam(value="id", required=false, defaultValue="1") Integer id,
 			@RequestParam(value="page", required=true, defaultValue="1") Integer page,
 			@RequestParam(value="rows", required=true, defaultValue="5") Integer rows,
+			@RequestParam(value="searchPhrase", required=false) String searchPhrase,
 			@RequestParam(value="sort", required=false) String sort, 
 			@RequestParam(value="order", required=false) String order) {
-		LOG.info("id="+id+",page="+page+",rows="+rows+",sort="+sort+",order="+order);
+		LOG.info("id="+id+",page="+page+",rows="+rows+",sort="+sort+",order="+order+",searchPhrase="+searchPhrase);
 		Map<String, Object> mapPara = new HashMap<String, Object>();
 		int offset = 0;
 		if (page > 0) {
@@ -46,6 +47,11 @@ public class EasyUIController {
 		}
 		mapPara.put("offset", offset);
 		mapPara.put("rowCount", rows);
+		
+		if (searchPhrase != "" && searchPhrase != null) {
+			mapPara.put("searchPhrase", searchPhrase);
+		}
+		
 		if (order != null) {
 			if ("id".equalsIgnoreCase(sort)) {
 				mapPara.put("idSort", order);
@@ -61,7 +67,9 @@ public class EasyUIController {
 				mapPara.put("cloneSort", order);
 			}
 		}
-			
+		JsonObject data = new JsonObject();
+		int total = 0;
+		total = this.authorService.selectAllCount();
 		List<Map<String, Object>> authors = authorService.selectAuthorByBootGrid(mapPara);
 		JsonArray array = new JsonArray();
 		JsonObject jsonObj = null;
@@ -73,7 +81,10 @@ public class EasyUIController {
 			array.add(jsonObj);
 		}
 		
-		return array.toString();
+		data.addProperty("total", total);
+		data.add("rows", array);
+		
+		return data.toString();
 	}
 	
 }
