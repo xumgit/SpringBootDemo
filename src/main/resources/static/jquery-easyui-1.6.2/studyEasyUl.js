@@ -172,8 +172,23 @@ $(document).ready(function(){
 		pagePosition: 'bottom',
 		sortName: 'id',        //设置哪些列可以进行排序。默认为 null。值为field的值也就是可以排序的字段，这个值会发送到数据库
         sortOrder: 'ASC',        //设置列排序的顺序,ASC 和 DESC，默认是 ASC。这个值会发送到数据库
-		queryParams:{           //设置请求远程数据发送的额外数据
+		/*queryParams:{           //设置请求远程数据发送的额外数据
             id: 1
+        },*/
+        /*loadFilter: function(data) {
+        	console.log("response data="+data);
+        },*/
+        onBeforeLoad: function(param) {
+        	console.log("onBeforeLoad=>param="+param);
+        	for(k in param) {
+        		console.log("onBeforeLoad=>k="+k+",v="+param[k]);
+        	}
+        },
+        onLoadSuccess: function(data) {
+        	console.log("onLoadSuccess=>data="+data.total);
+        },
+        onLoadError: function() {
+        	console.log("onLoadError=>");
         },
         rowStyler: function (index,row) {    //row接收整个数据对象
         	// 被styler方法覆盖
@@ -220,6 +235,54 @@ $(document).ready(function(){
 			console.log("onCancelEdit=>index="+index);
 			row.editing = false;
 			$(this).datagrid('refreshRow', index);
+		},
+		onClickRow: function(index,row) {
+			console.log("onClickRow=>index="+index);
+		},
+		onDblClickRow: function(index,row) {
+			console.log("onDblClickRow=>index="+index);
+		},
+		onClickCell: function(index,field,value){
+			console.log("onClickCell=>index="+index+",field="+field+",value="+value);
+		},
+		onDblClickCell: function(index,field,value){
+			console.log("onDblClickCell=>index="+index+",field="+field+",value="+value);
+		},
+		onSortColumn: function(sort,order) {
+			console.log("onSortColumn=>sort="+sort+",order="+order);
+		},
+		onResizeColumn: function(field,width) {
+			console.log("onResizeColumn=>field="+field+",width="+width);
+		},
+		onSelect: function(index,row) {
+			console.log("onSelect=>index="+index);
+		},
+		onUnselect: function(index,row) {
+			console.log("onUnselect=>index="+index);
+		},
+		onSelectAll: function(rows) {
+			console.log("onSelectAll=>"+rows.length);
+		},
+		onUnselectAll: function(rows) {
+			console.log("onUnselectAll=>"+rows.length);
+		},
+		onCheck: function(index,row) {
+			console.log("onCheck=>index="+index);
+		}, 
+		onUncheck: function(index,row) {
+			console.log("onUncheck=>index="+index);
+		},
+		onCheckAll: function(rows) {
+			console.log("onCheckAll=>"+rows.length);
+		},
+		onUncheckAll: function(rows) {
+			console.log("onUncheckAll=>"+rows.length);
+		},
+		onHeaderContextMenu: function(e,field) {
+			console.log("onHeaderContextMenu=>field="+field+",e="+e);
+		},
+		onRowContextMenu: function(e,index,row) {
+			console.log("onRowContextMenu=>index="+index+",e="+e);
 		}
     });
     
@@ -255,7 +318,7 @@ $(document).ready(function(){
             });
         }
     };
-    
+    test();
 	// tabs test
 	$('#nav-tabs').tabs({
 		selected: 1,
@@ -285,6 +348,33 @@ $(document).ready(function(){
         }
 	});
 });
+
+function test() {
+	
+	$('#myEasyui').datagrid('checkAll');
+	var row = $('#myEasyui').datagrid('getSelected');
+	
+	var nameOption = $('#myEasyui').datagrid('getColumnOption','name');
+	for(k in nameOption){
+		//console.log("test=>k="+k+",v="+nameOption[k]);
+	}
+	
+	var loadData = $('#myEasyui').datagrid('getData');
+	for(k in loadData){
+		//console.log("test=>k="+k+",v="+loadData[k]);
+	}
+	
+	var getRowsIndex = $('#myEasyui').datagrid('getRows', row);
+	console.log("test=>getRowsIndex="+getRowsIndex);
+	
+	var getCheckedRows = $('#myEasyui').datagrid('getChecked');
+	console.log("test=>getCheckedRows="+getCheckedRows);
+	
+	var getSelectedRows = $('#myEasyui').datagrid('getSelected');
+	console.log("test=>getSelectedRows="+getSelectedRows);
+	
+	$('#myEasyui').datagrid('highlightRow', 1);
+}
 
 function getRowIndex(target){
 	var tr = $(target).closest('tr.datagrid-row');
