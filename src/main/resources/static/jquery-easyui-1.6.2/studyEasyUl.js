@@ -14,11 +14,14 @@ var countrys = [
 	    {countryid:'6',country:'Polan'},
 	    {countryid:'7',country:'England'}
 	];
+
+var dataDrag = {"total":0,"rows":[]};
+var totalCostDrag = 0;
 	
 $(document).ready(function(){
 			
 	var windowWidth = $(window).width();
-	var contentWidth = (windowWidth-32)*0.20;
+	var contentWidth = (windowWidth-58)*0.20;
 	// datagrid test
     $('#myEasyui').datagrid({
         //width: 800,                 //设置宽度
@@ -165,10 +168,69 @@ $(document).ready(function(){
         scrollbarSize: 30,
         fitColumns: true,
         toolbar: '#tb',
+        view: detailview,
+        detailFormatter: function(index,row){
+    		return '<div id="ddv_' + index + '" class="easyui-panel" style="padding:5px 0"></div>';
+    	},
+    	onExpandRow: function(index,row){
+    		var ddv = $(this).datagrid('getRowDetail',index).find('#ddv_'+index);
+    		ddv.panel({
+    			title: 'Detail info',
+    			fit: false,
+    			border: true,
+    			cache: false,
+    			collapsed: false,
+    			collapsible: false,
+    			iconCls:'icon-ok',tools:[
+    				{
+    					iconCls:'icon-add',
+    					handler:function(){console.log('add');}
+    				},{
+    					iconCls:'icon-edit',
+    					handler:function(){console.log('edit');}
+    				}],
+    			href: '/easyui/dsiplayAuthorAgain?authorId='+row.id+"&name="+row.name+"&age="+row.age+"&email="+row.email+"&country="+row.country,
+    			onBeforeOpen: function() {
+    				console.log("onBeforeOpen");
+    			},
+    			onOpen: function() {
+    				console.log("onOpen");
+    			},
+    			onBeforeClose: function() {
+    				console.log("onBeforeClose");
+    			},
+    			onClose: function() {
+    				console.log("onClose");
+    			},
+    			onBeforeDestroy: function() {
+    				console.log("onBeforeDestroy");
+    			},
+    			onDestroy: function() {
+    				console.log("onDestroy");
+    			},
+    			onBeforeCollapse: function() {
+    				console.log("onBeforeCollapse");
+    			},
+    			onCollapse: function() {
+    				console.log("onCollapse");
+    			},
+    			onBeforeExpand: function() {
+    				console.log("onBeforeExpand");
+    			},
+    			onExpand: function() {
+    				console.log("onExpand");
+    			},
+    			onLoad: function(){
+    				console.log("onLoad");
+    				$('#myEasyui').datagrid('fixDetailRowHeight',index);
+    			}
+    		});
+    		$('#myEasyui').datagrid('fixDetailRowHeight',index);
+    	},
 		pagination: true,
 		pageNumber: 1,             //设置分页时初始化页码
-        pageSize: 5,               //设置分页时设置每页多少条
-        pageList: [5,10,15],          //设置可选每页显示条数
+        pageSize: 3,               //设置分页时设置每页多少条
+        pageList: [3,6,9],          //设置可选每页显示条数
 		pagePosition: 'bottom',
 		sortName: 'id',        //设置哪些列可以进行排序。默认为 null。值为field的值也就是可以排序的字段，这个值会发送到数据库
         sortOrder: 'ASC',        //设置列排序的顺序,ASC 和 DESC，默认是 ASC。这个值会发送到数据库
@@ -186,6 +248,13 @@ $(document).ready(function(){
         },
         onLoadSuccess: function(data) {
         	console.log("onLoadSuccess=>data="+data.total);
+        	//$("div[id^='ddv_']").panel('open', true);
+        	//var expland_length = $("td[field='_expander']").length;
+        	//console.log("expland_length="+expland_length);
+        	$("td[field='_expander']").each(function(index, element){
+        		// auto open panel
+        		//$(this).find("span.datagrid-row-expander").trigger("click");
+        	});
         },
         onLoadError: function() {
         	console.log("onLoadError=>");
@@ -226,8 +295,28 @@ $(document).ready(function(){
 		},
 		onAfterEdit: function(index,row,changes){
 			console.log("onAfterEdit=>index="+index+",id="+row.id);
-			console.log("name="+row.name+",email="+row.email+",country="+row.country);
-			// update database
+			console.log("name="+row.name+",age="+row.age+",email="+row.email+",country="+row.country);
+			$.ajax({
+				type: "POST",
+				url: "/easyui/saveAuthor",
+				data: {
+					"authorId": row.id,
+					"name": row.name,
+					"age": row.age,
+					"email": row.email,
+					"country": row.country
+				},
+				success: function(msg){
+					msg = $.parseJSON(msg);
+					console.log("status="+msg.status);
+					if (msg.status == "success") {
+						showMessage('Tip', '<span style="color: green;">Save author info success</span>');
+					}
+				},
+				error: function(data){
+					console.log("error="+data);
+				}
+			});
 			row.editing = false;
 			$(this).datagrid('refreshRow', index);
 		},
@@ -243,7 +332,7 @@ $(document).ready(function(){
 			console.log("onDblClickRow=>index="+index);
 		},
 		onClickCell: function(index,field,value){
-			console.log("onClickCell=>index="+index+",field="+field+",value="+value);
+			console.log("onClickCell=>index="+index+",field="+field+",value="+value);		
 		},
 		onDblClickCell: function(index,field,value){
 			console.log("onDblClickCell=>index="+index+",field="+field+",value="+value);
@@ -287,15 +376,15 @@ $(document).ready(function(){
     });
     
     //数据表格工具栏1
-    $('#tianjia').linkbutton({  //将工具栏里的添加执行按钮方法
+    $('#addRow').linkbutton({  //将工具栏里的添加执行按钮方法
         iconCls: 'icon-add',     //设置图标
         plain: true              //按钮扁平化
     });
-    $('#xiougai').linkbutton({  //将工具栏里的修改执行按钮方法
+    $('#modifyRow').linkbutton({  //将工具栏里的修改执行按钮方法
         iconCls: 'icon-edit',    //设置图标
         plain: true              //按钮扁平化
     });
-    $('#shanchu').linkbutton({  //将工具栏里的删除执行按钮方法
+    $('#deleteRow').linkbutton({  //将工具栏里的删除执行按钮方法
         iconCls: 'icon-remove',  //设置图标
         plain: true              //按钮扁平化
     });
@@ -305,20 +394,292 @@ $(document).ready(function(){
     $('.chx').linkbutton({  //查询按钮
         iconCls:"icon-search"
     });
-      
+    $('#addRow').click(function() {
+    	obj.addRow();
+    });
+    $('#modifyRow').click(function() {
+    	obj.modifyRow();
+    });
+    $('#deleteRow').click(function() {
+    	obj.deleteRow();
+    });
     //查询功能
     $('.chx').click(function () {   //点击查询后执行obj对象里的search方法
         obj.search();
     });
     var obj = {    //obj对象  
     	panduan: false,
-        search: function () {
+        search: function() {
             $('#myEasyui').datagrid('load',{                         //执行数据表格的load方法提交数据
             	searchPhrase: $.trim($('#searchPharse').val())
             });
+        },
+        addRow: function() {     	
+        	$('#myEasyui').datagrid('appendRow',{
+            	id: 51,
+            	name: 'newName',
+            	age: 30,
+            	email: 'newName@267.com',
+            	country: 'China'
+            });
+        },
+        modifyRow: function() {
+        	var row = $('#myEasyui').datagrid('getChecked');
+        	console.log("length="+row.length);
+        	if(row.length == 0){
+        		showMessage('Tip', '<span style="color: red;">please select a row</span>');
+        	}else if(row.length > 1) {
+        		showMessage('Tip', '<span style="color: red;">only select a row</span>');
+        	}else if(row.length == 1) {
+        		var row = $('#myEasyui').datagrid('getSelected');
+        		var index = $('#myEasyui').datagrid('getRowIndex', row);
+        		$('#dd').dialog({
+        		    title: 'My Dialog',
+        		    width: 400,
+        		    height: 250,
+        		    closed: false,
+        		    cache: false,
+        		    href: '/easyui/dsiplayAuthor?authorId='+row.id+"&name="+row.name+"&age="+row.age+"&email="+row.email+"&country="+row.country,
+        		    modal: true,
+        		    onClose: function () {
+                        console.log("onClose");
+                    },
+                    /*toolbar: [{
+                        text: 'Add',
+                        iconCls: 'icon-add',
+                        handler: function () {
+                            console.log('add');
+                        }
+                    }, '-', {
+                        text: 'Save',
+                        iconCls: 'icon-save',
+                        handler: function () {
+                        	console.log('save');
+                        }
+                    }],*/
+                    buttons: [{
+                        text: 'Save',
+                        iconCls: 'icon-save',
+                        handler: function () {
+                        	console.log('ok');
+                        	$.ajax({
+                				type: "POST",
+                				url: "/easyui/saveAuthor",
+                				data: {
+                					"authorId": $("#display_authorId").val(),
+                					"name": $("#display_name").val(),
+                					"age": $("#display_age").val(),
+                					"email": $("#display_email").val(),
+                					"country": $("#display_country").val()
+                				},
+                				success: function(msg){
+                					msg = $.parseJSON(msg);
+                					console.log("status="+msg.status);
+                					if (msg.status == "success") {
+                						var trs = $("div#userlist .panel-body .datagrid-view2 div.datagrid-body table tr");
+                						trs.each(function(index, element){
+                							if($(this).hasClass("datagrid-row-checked")) {
+                								var indexName = $(this).find("td:eq(1) div div").attr("index");
+                								$(this).find("td:eq(1) div").html("<div id=\"" + $("#display_authorId").val() + "\" index=\"" + indexName 
+                										+ "\" name=\"" + $("#display_name").val() + "\" age=\"" + $("#display_age").val() + "\">" 
+                										+ $("#display_name").val() + "</div>");
+                								$(this).find("td:eq(2) div").text($("#display_age").val());
+                								$(this).find("td:eq(3) div").text($("#display_email").val());
+                								$(this).find("td:eq(4) div").text($("#display_country").val());
+                								return false;
+                							}
+                						});
+                						$('#dd').dialog('close');
+                						showMessage('Tip', '<span style="color: green;">Save author info success</span>');
+                					}
+                				},
+                				error: function(data){
+                					console.log("error="+data);
+                				}
+                			});
+                        }
+                    }, {
+                        text: 'Cancel',
+                        iconCls: 'icon-cancel',
+                        handler: function () {
+                            $('#dd').dialog('close');
+                        }
+                    }]
+        		});
+        		//$('#dd').dialog('refresh', 'xx');
+        	}
+        },
+        deleteRow: function() {
+        	var row = $('#myEasyui').datagrid('getChecked');
+        	console.log("length="+row.length);
+        	if (row.length == 0) {
+        		showMessage('Tip', '<span style="color: red;">please select row</span>');
+        		return;
+        	}
+
+        	$.messager.confirm('Tip', 'Delete select row?', function(b){
+        		if (b){
+        			for(r in row){
+        				$('#myEasyui').datagrid('deleteRow', $('#myEasyui').datagrid('getRowIndex', row[r]));
+        	        }     	          
+        		} else {
+        			console.log('cancel');       	            
+        		}
+        	});
+        	
         }
     };
     test();
+    
+    // drag example
+    $('#drag #cartcontent').datagrid({
+		singleSelect:true,
+		columns: [[
+			{
+	            field: 'name',      //field,对应远程JSON 数据里的对象属性，也就是数据库字段
+	            title: 'Name',      //title,定义数据的标题
+				halign: 'center',
+				align: 'center',
+				resizable: false,
+				fixed: true,
+				width: 80,
+				formatter: function(value,row,index){
+					return value;
+				}
+	        },
+	        {
+	            field: 'quantity',      //field,对应远程JSON 数据里的对象属性，也就是数据库字段
+	            title: 'Quantity',      //title,定义数据的标题
+				halign: 'center',
+				align: 'center',
+				resizable: false,
+				fixed: true,
+				width: 120,
+				formatter:function(value,row,index) {
+					var html = "<table class=\"table_quantity\"><tr>"+
+								"<td>" + "<input class=\"minusBtn\" index=\""+index+"\" price=\""+row.price+"\" id=\"minus_"+index+"\" style=\"width:20px;\" type=\"button\" value=\"-\" />" + "</td>" +
+								"<td>" + "<input style=\"width:50px;text-align:center;\" id=\"quantity_"+index+"\" value=\""+value+"\" readonly=\"readonly\"/>" + "</td>" +
+								"<td>" + "<input class=\"addBtn\" index=\""+index+"\" price=\""+row.price+"\" id=\"add_"+index+"\" style=\"width:20px;\" type=\"button\" value=\"+\" />" + "</td>" +
+								"</tr></table>";
+					return html;
+				},
+				editor:{
+					type:'numberbox',
+					options:{
+						precision:0
+					}
+				}
+	        },
+	        {
+	            field: 'price',     //field,对应远程JSON 数据里的对象属性，也就是数据库字段
+	            title: 'Price',      //title,定义数据的标题
+				halign: 'center',
+				align: 'center',
+				resizable: false,
+				fixed: true,
+				width: 40				
+	        },
+	        {
+            	field:'action', 
+            	title:'Action', 
+            	align:'center',
+            	fixed: true,
+            	width: 115,
+				formatter:function(value,row,index){
+					/*if (row.editing){
+						var s = '<button id="saveRowPrice" style="width:50px;text-align:center;" onclick="saveRowPrice(\''
+							+row.name+'\','+row.quantity+','+row.price+','+index+')">Save</button> ';
+						var c = '<button id="cancelRowPrice" style="width:50px;text-align:center;" onclick="cancelRowPrice(\''
+							+row.name+'\','+row.quantity+','+row.price+','+index+')">Cancel</button>';
+						return s+c;
+					} else {
+						var e = '<button id="editRowPrice" style="width:50px;text-align:center;" onclick="editRowPrice(\''
+							+row.name+'\','+row.quantity+','+row.price+','+index+')">Edit</button> ';
+						var d = '<button id="deleteRowPrice" style="width:50px;text-align:center;" onclick="deleteRowPrice(\''
+							+row.name+'\','+row.quantity+','+row.price+','+index+')">Delete</button>';
+						return e+d;
+					}*/	
+					var d = '<button id="deleteRowPrice" style="width:50px;text-align:center;" onclick="deleteRowPrice(\''
+						+row.name+'\','+row.quantity+','+row.price+','+index+')">Delete</button>';
+					return d;
+				}
+			}
+		]],
+        onBeginEdit: function(index,row) {
+        	console.log("onBeginEdit=>index="+index);
+        },
+        onEndEdit: function(index,row,changes) {
+        	console.log("onEndEdit=>index="+index);
+		},
+		onBeforeEdit: function(index,row){
+			console.log("onBeforeEdit=>index="+index);
+			row.editing = true;
+			$(this).datagrid('refreshRow', index);
+		},
+		onAfterEdit: function(index,row,changes){
+			console.log("onAfterEdit=>index="+index);
+			row.editing = false;
+			$(this).datagrid('refreshRow', index);
+		},
+		onCancelEdit: function(index,row){
+			console.log("onCancelEdit=>index="+index);
+			row.editing = false;
+			$(this).datagrid('refreshRow', index);
+		},
+		onLoadSuccess: function(data){
+		    $("input.minusBtn").click(function(){
+		    	var index = parseInt($(this).attr("index"));
+		    	var price = parseInt($(this).attr("price"));
+		    	var quantity = parseInt($("#quantity_"+index).val());
+		    	console.log("index="+index+",price="+price+",quantity="+quantity);
+		    	if(quantity > 0){
+		    		$("#quantity_"+index).val(quantity-1);
+		    		var remainPrice = parseInt($('#drag div.cart .total').html().split('$')[1]) - price;
+		    		$('#drag div.cart .total').html('Total: $'+remainPrice);
+		    	}else if(quantity == 0) {
+		    		console.log("nothing");
+		    	}
+		    });
+		    $("input.addBtn").click(function(){
+		    	var index = parseInt($(this).attr("index"));
+		    	var price = parseInt($(this).attr("price"));
+		    	var quantity = parseInt($("#quantity_"+index).val());
+		    	console.log("index="+index+",price="+price+",quantity="+quantity);
+		    	if(quantity >= 0){
+		    		$("#quantity_"+index).val(quantity+1);
+		    		var remainPrice = parseInt($('#drag div.cart .total').html().split('$')[1]) + price;
+		    		$('#drag div.cart .total').html('Total: $'+remainPrice);
+		    	}
+		    });
+		}
+	});
+	$('#drag .item').draggable({
+		revert:true,
+		proxy:'clone',
+		onStartDrag:function(){
+			$(this).draggable('options').cursor = 'not-allowed';
+			$(this).draggable('proxy').css('z-index',10);
+		},
+		onStopDrag:function(){
+			$(this).draggable('options').cursor='move';
+		}
+	});
+	$('#drag .cart').droppable({
+		onDragEnter:function(e,source){
+			$(source).draggable('options').cursor='auto';
+		},
+		onDragLeave:function(e,source){
+			$(source).draggable('options').cursor='not-allowed';
+		},
+		onDrop:function(e,source){
+			var name = $(source).find('p:eq(0)').html();
+			var price = $(source).find('p:eq(1)').html();
+			addProduct(name, parseFloat(price.split('$')[1]));
+		}
+	});
+    
+
+	
 	// tabs test
 	$('#nav-tabs').tabs({
 		selected: 1,
@@ -349,6 +710,69 @@ $(document).ready(function(){
 	});
 });
 
+function saveRowPrice(name, quantity, price, index) {
+	$('#cartcontent').datagrid('endEdit', index);
+}
+
+function cancelRowPrice(name, quantity, price, index) {
+	$('#cartcontent').datagrid('cancelEdit', index);
+}
+
+function editRowPrice(name, quantity, price, index) {
+	$('#cartcontent').datagrid('beginEdit', index);
+}
+
+function deleteRowPrice(name, quantity, price, index) {	
+	var _quantity = parseInt($("#quantity_"+index).val());
+	console.log("price="+$('#drag div.cart .total').html().split('$')[1]+","+_quantity*price);
+	var remainPrice = $('#drag div.cart .total').html().split('$')[1] - _quantity*price;
+	$('#drag div.cart .total').html('Total: $'+remainPrice);
+	$('#cartcontent').datagrid('deleteRow', index);
+}
+
+function addProduct(name,price){
+	function add(){
+		for(var i=0; i<dataDrag.total; i++){
+			var row = dataDrag.rows[i];
+			if (row.name == name){
+				row.quantity += 1;
+				return;
+			}
+		}
+		dataDrag.total += 1;
+		dataDrag.rows.push({
+			name:name,
+			quantity:1,
+			price:price
+		});
+	}
+	add();
+	totalCostDrag += price;
+	$('#drag #cartcontent').datagrid('loadData', dataDrag);
+	$('#drag div.cart .total').html('Total: $'+totalCostDrag);
+}
+
+function showcontent(language) {
+	$('#content').html('Introduction to ' + language + ' language');
+}
+
+function showMessage(title, msg) {
+	$.messager.show({
+		title: title,
+		msg: msg,
+		timeout: 4000,
+		width: 200,
+		height: 10,
+		showType: 'show',
+		style:{
+			right: 0,
+			left: '',
+			top: document.body.scrollTop+document.documentElement.scrollTop,
+			bottom: ''
+		}
+	});
+}
+
 function test() {
 	
 	$('#myEasyui').datagrid('checkAll');
@@ -373,7 +797,7 @@ function test() {
 	var getSelectedRows = $('#myEasyui').datagrid('getSelected');
 	console.log("test=>getSelectedRows="+getSelectedRows);
 	
-	$('#myEasyui').datagrid('highlightRow', 1);
+	$('#myEasyui').datagrid('highlightRow', 1);	
 }
 
 function getRowIndex(target){

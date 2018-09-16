@@ -8,6 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -83,8 +84,78 @@ public class EasyUIController {
 		
 		data.addProperty("total", total);
 		data.add("rows", array);
+		//data.add("footer", array);
 		
 		return data.toString();
+	}
+	
+	@RequestMapping(value="/dsiplayAuthor")
+	public String displayAuthorInfo(ModelMap model,
+			@RequestParam(value="authorId", required=false) Integer authorId,
+			@RequestParam(value="name", required=false) String name,
+			@RequestParam(value="age", required=false) Integer age,
+			@RequestParam(value="email", required=false) String email, 
+			@RequestParam(value="country", required=false) String country) {
+		
+		model.addAttribute("authorId", authorId);
+		model.addAttribute("name", name);
+		model.addAttribute("age", age);
+		model.addAttribute("email", email);
+		model.addAttribute("country", country);
+		
+		return "easyui/displayAuthor";
+	}
+	
+	@RequestMapping(value="/dsiplayAuthorAgain")
+	public String displayAuthorInfoAgain(ModelMap model,
+			@RequestParam(value="authorId", required=false) Integer authorId,
+			@RequestParam(value="name", required=false) String name,
+			@RequestParam(value="age", required=false) Integer age,
+			@RequestParam(value="email", required=false) String email, 
+			@RequestParam(value="country", required=false) String country) {
+		
+		model.addAttribute("authorId", authorId);
+		model.addAttribute("name", name);
+		model.addAttribute("age", age);
+		model.addAttribute("email", email);
+		model.addAttribute("country", country);
+		
+		return "easyui/displayAuthorAgain";
+	}
+	
+	@RequestMapping(value="/saveAuthor")
+	@ResponseBody
+	public String saveAuthorInfo(@RequestParam(value="authorId", required=false) Integer authorId,
+			@RequestParam(value="name", required=false) String name,
+			@RequestParam(value="age", required=false) Integer age,
+			@RequestParam(value="email", required=false) String email, 
+			@RequestParam(value="country", required=false) String country) {
+		String status = "{\"status\": \"failed\"}";
+		Author author = new Author();
+		if (authorId != null) {
+			author.setId(authorId);
+		} else {
+			return status;
+		}
+		if (name != null) {
+			author.setName(name);
+		}
+		if (age != null) {
+			author.setAge(age);
+		}
+		if (email != null) {
+			author.setEmail(email);
+		}
+		if (country != null) {
+			author.setCountry(country);
+		}
+		
+		int affectRow = this.authorService.updateByPrimaryKeySelective(author);
+		if (affectRow > 0) {
+			status = "{\"status\": \"success\"}";
+		}
+		
+		return status;
 	}
 	
 }
