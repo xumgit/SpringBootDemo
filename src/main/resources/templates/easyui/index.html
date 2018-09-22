@@ -212,6 +212,33 @@
 					<h2>Drop here to add to cart</h2>
 				</div>
 		</div>
+		<div title="Form" style="padding:10px">
+			<div style="padding:3px 2px;border-bottom:1px solid #ccc">Form Validation</div>
+			<form id="ff" method="post">
+				<div>
+					<label for="name">Name:</label>
+					<input class="easyui-validatebox" type="text" name="name" required="true"></input>
+				</div>
+				<div>
+					<label for="email">Email:</label>
+					<input class="easyui-validatebox" type="text" name="email" required="true" validType="email"></input>
+				</div>
+				<div>
+					<label for="subject">Subject:</label>
+					<input class="easyui-validatebox" type="text" name="subject" required="true"></input>
+				</div>
+				<div>
+					<label for="message">Message:</label>
+					<textarea name="message" style="height:60px;"></textarea>
+				</div>
+				<div>
+					<input type="submit" value="Submit">
+				</div>
+			</form>
+		</div>
+		<div title="Combobox" style="padding:10px">
+			<input id="cc" class="easyui-combobox" style="width:100px"></input>
+		</div>
 	</div>
 	<div id="tab-tools">
 		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-add'" onclick="addRow()"></a>

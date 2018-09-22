@@ -123,6 +123,43 @@ public class EasyUIController {
 		return "easyui/displayAuthorAgain";
 	}
 	
+	@RequestMapping(value="/authorInfo")
+	@ResponseBody
+	public String getAuthorInfo(@RequestParam(value="testid", required=false) Integer testid,
+			@RequestParam(value="testlanguage", required=false) String testlanguage) {
+		LOG.info("testid="+testid+",testlanguage="+testlanguage);
+
+		JsonArray array = new JsonArray();
+		Map<String, Object> mapPara = new HashMap<String, Object>();
+		List<Map<String, Object>> authors = authorService.selectAuthorByBootGrid(mapPara);
+		JsonObject jsonObj = null;
+		for (Map<String, Object> kv : authors) { 
+			jsonObj = new JsonObject();
+			for (Map.Entry<String, Object> entry : kv.entrySet()) {
+				jsonObj.addProperty(entry.getKey(), String.valueOf(entry.getValue()));
+			}
+			array.add(jsonObj);
+		}
+
+		LOG.info("array="+array.toString());
+
+		return array.toString();
+	}
+
+	@RequestMapping(value="/form")
+	@ResponseBody
+	public String handleFormData(@RequestParam(value="name", required=false) String name,
+			@RequestParam(value="email", required=false) String email,
+			@RequestParam(value="subject", required=false) String subject,
+			@RequestParam(value="message", required=false) String message) {
+		String status = "{\"status\": \"success\"}";
+
+		LOG.info("name="+name+",email="+email);
+		LOG.info("subject="+subject+",message="+message);
+
+		return status;
+	}
+
 	@RequestMapping(value="/saveAuthor")
 	@ResponseBody
 	public String saveAuthorInfo(@RequestParam(value="authorId", required=false) Integer authorId,
