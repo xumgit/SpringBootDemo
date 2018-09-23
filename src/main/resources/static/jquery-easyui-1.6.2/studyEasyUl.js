@@ -375,6 +375,226 @@ $(document).ready(function(){
 		}
     });
     
+    $('#tt').tree({
+        //url: ...,
+	    	data: [{
+	    	    "id":1,
+	    	    "text":"Folder1",
+	    	    "iconCls":"icon-save",
+	    	    "children":[{
+	    	    		"id": 2,
+	    	        "text":"File1",
+	    	        "checked":true
+	    	    },{
+	    	    		"id": 3,
+	    	        "text":"Books",
+	    	        "state":"open",
+	    	        "attributes":{
+	    	            "url":"#",
+	    	            "price":100
+	    	        },
+	    	        "children":[{
+	    	        		"id": 4,
+	    	            "text":"PhotoShop",
+	    	            "checked":true
+	    	        },{
+	    	            "id": 5,
+	    	            "text":"Sub Bookds",
+	    	            "state":"closed"
+	    	        }]
+	    	    }]
+	    	},{
+	    		"id": 6,
+	    	    "text":"Languages",
+	    	    "state":"closed",
+	    	    "children":[{
+	    	    		"id": 7,
+	    	        "text":"Java"
+	    	    },{
+	    	    		"id": 8,
+	    	        "text":"C#"
+	    	    }]
+	    	}],
+	    	animate: false,
+	    	cascadeCheck: true,
+	    	onlyLeafCheck: false,
+	    	lines: false,
+	    	dnd: false,
+	    	formatter: function(node){
+	    		return "<span style='color:red;'>"+node.text+"</span>";
+	    	},
+        loadFilter: function(data){
+        		console.log("Tree=>loadFilter,id="+data.id);
+            if (data.d){
+                return data.d;
+            } else {
+                return data;
+            }
+        },
+        loader: function(param,success,error) {
+        		console.log("Tree=>loader,param="+param);
+        		console.log("Tree=>loader,success="+success);
+        		console.log("Tree=>loader,error="+error);
+        },
+        checkbox: function(node){
+        		console.log("Tree=>checkbox,id="+node.id);
+    			//if (node.id == 11 || node.id == 122){
+    				//return true;
+    			//}
+    		},
+    		onClick: function(node){
+    			console.log("Tree=>onClick,text="+node.text);
+    		},
+    		onDblClick: function(node){
+    			console.log("Tree=>onDblClick,text="+node.text);
+    		},
+    		onBeforeLoad: function(node, param) {
+    			console.log("Tree=>onBeforeLoad,node="+node);
+    			console.log("Tree=>onBeforeLoad,param="+param);
+    			//for(var p in param){
+    				//console.log("p="+p+",param["+p+"]="+param[p]);
+    			//}
+    		},
+    		onLoadSuccess: function(node, data) {
+    			console.log("Tree=>onLoadSuccess,data="+data);
+    		},
+    		onLoadError: function(arguments) {
+    			console.log("Tree=>onLoadError,arguments="+arguments);
+    		},
+    		onBeforeExpand: function(node) {
+    			console.log("Tree=>onBeforeExpand,id="+node.id);
+    		},
+    		onExpand: function(node) {
+    			console.log("Tree=>onExpand,id="+node.id);
+    		},
+    		onBeforeCollapse: function(node) {
+    			console.log("Tree=>onBeforeCollapse,id="+node.id);
+    		},
+    		onCollapse: function(node) {
+    			console.log("Tree=>onCollapse,id="+node.id);
+    		},
+    		onBeforeCheck: function(node, checked) {
+    			console.log("Tree=>onBeforeCheck,id="+node.id);
+    			console.log("Tree=>onBeforeCheck,checked="+checked);
+    		},
+    		onCheck: function(node, checked) {
+    			console.log("Tree=>onCheck,checked="+checked);
+    		},
+    		onBeforeSelect: function(node) {
+    			console.log("Tree=>onBeforeSelect,id="+node.id);
+    		},
+    		onSelect: function(node) {
+    			console.log("Tree=>onSelect,id="+node.id);
+    		}
+    });
+    
+    $('#pg').propertygrid({
+        url: '/easyui/propertygrid',
+        showGroup: true,
+        scrollbarSize: 0
+    });
+    
+    $('#dl').datalist({
+        url: '/easyui/dataList',
+        method: 'get',
+        valueField: "name",
+        textField: "value",
+        groupField: 'group',
+        checkbox: true,
+        selectOnCheck: false,
+        lines: true,
+        onLoadSuccess: function(data) {
+        		console.log("DataList=onLoadSuccess=>data="+data.total);
+        		/*var opts = $('#dl').datagrid('options');
+        		for(var o in opts){
+        			console.log(o+","+opts[o]);
+        		}*/
+        },
+        textFormatter: function(value,row,index) {
+        		var valueField = $('#dl').datagrid('options')['valueField'];
+        		var textField = $('#dl').datagrid('options')['textField'];
+        		//console.log("DataList=textFormatter=>valueField="+valueField+",textField="+textField);
+        		console.log("DataList=textFormatter=>value="+value+",name="+row[valueField]+",index="+index);
+        		return "<span style='color:green;'>" + value + "</span>";
+        },
+        groupFormatter: function(value,rows) {
+        		var groupField = $('#dl').datagrid('options')['groupField'];
+        		console.log("DataList=groupFormatter=>value="+value+",rows="+rows);
+        		return "<span style='color:red;'>" + value + "</span>";
+        },
+		onCheck: function(index,row) {
+			console.log("DataList=onCheck=>index="+index);
+		}, 
+		onUncheck: function(index,row) {
+			console.log("DataList=onUncheck=>index="+index);
+		}
+    });
+    
+    $('#tg').treegrid({
+        url: '/easyui/treeList',
+        idField: 'id',
+        treeField: 'name',
+        columns:[[
+            {field:'name', title:'Name',width:200},
+            {field:'size',title:'size',width:80,align:'right'},
+            {field:'date',title:'Modified Date',width:120}
+        ]],
+        onBeforeLoad: function(row, param) {
+			console.log("TreeGrid=onBeforeLoad,row="+row);
+			console.log("TreeGrid=onBeforeLoad,param="+param);
+		},
+		onLoadSuccess: function(row, data) {
+			console.log("TreeGrid=onLoadSuccess,data="+data);
+		},
+		onLoadError: function(arguments) {
+			console.log("TreeGrid=onLoadError,arguments="+arguments);
+		},
+        onClickRow: function(row) {
+			console.log("TreeGrid=onClickRow=>row="+row);
+		},
+		onDblClickRow: function(row) {
+			console.log("TreeGrid=onDblClickRow=>row="+row);
+		},
+		onClickCell: function(field,row){
+			console.log("TreeGrid=onClickCell=>field="+field+",row="+row);		
+		},
+		onDblClickCell: function(field,row){
+			console.log("TreeGrid=onDblClickCell=>field="+field+",row="+row);
+		}
+    });
+    
+    $('#ss').numberspinner({
+        min: 10,
+        max: 100,
+        editable: false
+    });
+    
+    $('#ts').timespinner({
+        min: '08:30',
+        required: true,
+        showSeconds: true
+    });
+    
+    $('#sl').slider({
+        mode: 'h',
+        rule: [0,'|',25,'|',50,'|',75,'|',100],
+        value: 13,
+        showTip: true,
+        tipFormatter: function(value){
+            return value + '%';
+        }
+    });
+    
+    $('#dtb').datetimebox({
+        value: '3/4/2010 2:3',
+        required: true,
+        showSeconds: false
+    });
+    
+    $('#cal').calendar({
+        current: new Date()
+    });
+    
     //数据表格工具栏1
     $('#addRow').linkbutton({  //将工具栏里的添加执行按钮方法
         iconCls: 'icon-add',     //设置图标
@@ -677,9 +897,7 @@ $(document).ready(function(){
 			addProduct(name, parseFloat(price.split('$')[1]));
 		}
 	});
-    
-
-	
+    	
 	// tabs test
 	$('#nav-tabs').tabs({
 		selected: 1,
