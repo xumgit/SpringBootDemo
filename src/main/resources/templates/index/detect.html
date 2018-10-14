@@ -1,0 +1,17 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<script type="text/javascript" th:src="@{/js/jquery-1.11.3.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/demo.js}"></script>
+<title>Detect</title>
+</head>
+<body>
+	<div>
+		<button id="detect">Detect</button> <br />
+		<img id="loading" style="display:none;" th:src="@{/images/ajax-loader.gif}" />
+	</div>
+	<br />Detect Result: <br />
+	<div id="detectResult">
+	</div>
+</body>
+</html>
