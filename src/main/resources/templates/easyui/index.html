@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>EasyUI</title>
+<link rel="stylesheet" type="text/css" href="/jquery-easyui-1.6.2/themes/bootstrap/easyui.css">
+<link rel="stylesheet" type="text/css" href="/jquery-easyui-1.6.2/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="/jquery-easyui-1.6.2/themes/color.css">
+<script type="text/javascript" src="/jquery-easyui-1.6.2/jquery.min.js"></script>
+<script type="text/javascript" src="/jquery-easyui-1.6.2/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="/jquery-easyui-1.6.2/customer/datagrid-detailview.js"></script>
+<script type="text/javascript" src="/jquery-easyui-1.6.2/studyEasyUl.js"></script>
+<link rel="stylesheet" type="text/css" href="/jquery-easyui-1.6.2/studyEasyUI.css">
+</head>
+<body>
+	<div class="easyui-tabs" id="nav-tabs" data-options="tools:'#tab-tools'">
+		<div title="Study EasyUI" style="padding:10px">
+			<p>Study EasyUI URL: <a href="http://www.jeasyui.com/documentation/index.php#" target="_blank">EasyUi</a></p>
+		</div>
+		<div title="My Documents" id="userlist">
+			<table id="myEasyui"></table>
+			<div id="tb">
+    			<div>
+        			<a id="addRow" href="#">添加</a>
+        			<a id="modifyRow" href="#">修改</a>
+        			<a id="deleteRow" href="#">删除</a>
+    			</div>
+    			<div id="gjl2">
+        			<label for="searchPhrase">查询内容:</label>
+        			<input class="textbox" id="searchPharse" name="searchPhrase" value="" />
+        			<a class="chx" href="#">查询</a>
+    			</div>
+    			<div id="dd"></div>
+			</div>
+		</div>
+		<div title="Help" data-options="iconCls:'icon-help',closable:true" style="padding:10px">
+			<div style="background:#fafafa;padding:5px;width:200px;border:1px solid #ccc">
+				<a href="#" class="easyui-splitbutton" menu="#mm1" iconCls="icon-edit">Edit</a>
+				<a href="#" class="easyui-menubutton" menu="#mm2" iconCls="icon-help">Help</a>
+			</div>
+			<div id="mm1" style="width:150px;">
+				<div iconCls="icon-undo">Undo</div>
+				<div iconCls="icon-redo">Redo</div>
+				<div class="menu-sep"></div>
+				<div>
+					<span>Open</span>
+					<div style="width:150px;">
+						<div>Firefox</div>
+						<div>Internet Explorer</div>
+						<div class="menu-sep"></div>
+						<div>Select Program...</div>
+					</div>
+				</div>				
+				<div>Cut</div>
+				<div>Copy</div>
+				<div>Paste</div>
+				<div class="menu-sep"></div>
+				<div iconCls="icon-remove">Delete</div>
+				<div>Select All</div>
+			</div>
+			<div id="mm2" style="width:100px;">
+				<div>Help</div>
+				<div>Update</div>
+				<div>About</div>
+			</div>
+		</div>
+		<div title="Layout" style="padding:10px">
+		    <div class="easyui-layout" style="width:400px;height:200px;">
+				<div region="west" split="true" title="Navigator" style="width:150px;">
+				<p style="padding:5px;margin:0;">Select language:</p>
+				<ul>
+					<li><a href="javascript:void(0)" onclick="showcontent('java')">Java</a></li>
+					<li><a href="javascript:void(0)" onclick="showcontent('cshape')">C#</a></li>
+					<li><a href="javascript:void(0)" onclick="showcontent('vb')">VB</a></li>
+					<li><a href="javascript:void(0)" onclick="showcontent('erlang')">Erlang</a></li>
+				</ul>
+			</div>
+			<div id="content" region="center" title="Language" style="padding:5px;">
+			</div>
+			</div>
+		</div>
+		<div title="Accordion" style="padding:10px">
+			<div class="easyui-accordion" style="width:300px;height:200px;">
+				<div title="About Accordion" iconCls="icon-ok" style="overflow:auto;padding:10px;">
+					<h3 style="color:#0099FF;">Accordion for jQuery</h3>
+					<p>Accordion is a part of easyui framework for jQuery. It lets you define your accordion component on web page more easily.</p>
+				</div>
+				<div title="About easyui" iconCls="icon-reload" selected="true" style="padding:10px;">
+					easyui help you build your web page easily
+				</div>
+				<div title="Tree Menu">
+					<ul id="tt1" class="easyui-tree">
+						<li>
+							<span>Folder1</span>
+							<ul>
+								<li>
+									<span>Sub Folder 1</span>
+									<ul>
+										<li><span>File 11</span></li>
+										<li><span>File 12</span></li>
+										<li><span>File 13</span></li>
+									</ul>
+								</li>
+								<li><span>File 2</span></li>
+								<li><span>File 3</span></li>
+							</ul>
+						</li>
+						<li><span>File2</span></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div title="Windows XP" style="padding:10px">
+			<div style="width:200px;height:auto;background:#7190E0;padding:5px;">
+				<div class="easyui-panel" title="Picture Tasks" collapsible="true" style="width:200px;height:auto;padding:10px;">
+					View as a slide show<br/>
+					Order prints online<br/>
+					Print pictures
+				</div>
+				<br/>
+				<div class="easyui-panel" title="File and Folder Tasks" collapsible="true" style="width:200px;height:auto;padding:10px;">
+					Make a new folder<br/>
+					Publish this folder to the Web<br/>
+					Share this folder
+				</div>
+				<br/>
+				<div class="easyui-panel" title="Other Places" collapsible="true" collapsed="true" style="width:200px;height:auto;padding:10px;">
+					New York<br/>
+					My Pictures<br/>
+					My Computer<br/>
+					My Network Places
+				</div>
+				<br/>
+				<div class="easyui-panel" title="Details" collapsible="true" style="width:200px;height:auto;padding:10px;">
+					My documents<br/>
+					File folder<br/><br/>
+					Date modified: Oct.3rd 2010
+				</div>
+			</div>
+		</div>
+		<div title="Drag" id="drag" style="padding:10px">
+				<ul class="products">
+					<li>
+						<a href="#" class="item">
+							<img src="/images/shirt1.gif"/>
+							<div>
+								<p>Balloon</p>
+								<p>Price:$15</p>
+							</div>
+						</a>
+					</li>
+					<li>
+						<a href="#" class="item">
+							<img src="/images/shirt2.gif"/>
+							<div>
+								<p>Feeling</p>
+								<p>Price:$25</p>
+							</div>
+						</a>
+					</li>
+					<li>
+						<a href="#" class="item">
+							<img src="/images/shirt3.gif"/>
+							<div>
+								<p>Elephant</p>
+								<p>Price:$35</p>
+							</div>
+						</a>
+					</li>
+					<li>
+						<a href="#" class="item">
+							<img src="/images/shirt4.gif"/>
+							<div>
+								<p>Stamps</p>
+								<p>Price:$45</p>
+							</div>
+						</a>
+					</li>
+					<li>
+						<a href="#" class="item">
+							<img src="/images/shirt5.gif"/>
+							<div>
+								<p>Monogram</p>
+								<p>Price:$55</p>
+							</div>
+						</a>
+					</li>
+					<li>
+						<a href="#" class="item">
+							<img src="/images/shirt6.gif"/>
+							<div>
+								<p>Rolling</p>
+								<p>Price:$65</p>
+							</div>
+						</a>
+					</li>
+				</ul>
+				<div class="cart">
+					<h1>Shopping Cart</h1>
+					<div style="background:#fff">
+					<table id="cartcontent" fitColumns="true" style="width:360px;height:auto;">
+						<thead>
+							<tr>
+								<th field="name" width=140>Name</th>
+								<th field="quantity" width=60 align="right">Quantity</th>
+								<th field="price" width=60 align="right">Price</th>
+							</tr>
+						</thead>
+					</table>
+					</div>
+					<p class="total">Total: $0</p>
+					<h2>Drop here to add to cart</h2>
+				</div>
+		</div>
+		<div title="Form" style="padding:10px">
+			<div style="padding:3px 2px;border-bottom:1px solid #ccc">Form Validation</div>
+			<form id="ff" method="post">
+				<div>
+					<label for="name">Name:</label>
+					<input class="easyui-validatebox" type="text" name="name" required="true"></input>
+				</div>
+				<div>
+					<label for="email">Email:</label>
+					<input class="easyui-validatebox" type="text" name="email" required="true" validType="email"></input>
+				</div>
+				<div>
+					<label for="subject">Subject:</label>
+					<input class="easyui-validatebox" type="text" name="subject" required="true"></input>
+				</div>
+				<div>
+					<label for="message">Message:</label>
+					<textarea name="message" style="height:60px;"></textarea>
+				</div>
+				<div>
+					<input type="submit" value="Submit">
+				</div>
+			</form>
+			<div><h1>NumberSpinner</h1></div>
+			<div><input id="ss" required="required" style="width:80px;height:20px;" /></div>
+			<div><h1>TimeSpinner</h1></div>
+			<div><input id="ts" style="width:160px;height:20px;" /></div>
+			<div><h1>Slider</h1></div>
+			<div><div id="sl" style="width:300px;"></div></div>
+			<div><h1>DateTimeBox</h1></div>
+			<div><input id="dtb" type="text" name="birthday" style="width:150px" /></div>
+			<div><h1>Calendar</h1></div>
+			<div><div id="cal" style="width:180px;height:180px;"></div></div>
+		</div>
+		<div title="Combobox" style="padding:10px">
+			<input id="cc" class="easyui-combobox" style="width:100px"></input>
+		</div>
+		<div title="Tree" style="padding:10px">
+			<ul id="tt"></ul>
+		</div>
+		<div title="PropertyGrid" style="padding:10px">
+			<table id="pg" style="width:300px"></table>
+		</div>
+		<div title="DataList" style="padding:10px">
+			<div id="dl"></div>
+		</div>
+		<div title="TreeGrid" style="padding:10px">
+			<table id="tg" style="width:400px;height:300px"></table>
+		</div>
+	</div>
+	<div id="tab-tools">
+		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-add'" onclick="addRow()"></a>
+		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-remove'" onclick="removePanel()"></a>
+	</div>
+</body>
+</html>

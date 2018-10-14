@@ -1,0 +1,26 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<title>displayAuthorInfoAgain</title>
+<style type="text/css">
+
+</style>
+</head>
+<body>
+	<div id="data">
+		<table id="grid-data">
+			<thead>
+				<tr>
+					<td><input name="display_authorId_again" type="text" th:value="${authorId}" style="display:none;"/></td>
+				</tr>
+				<tr>
+					<td>Name:<input name="display_name_again" type="text" th:value="${name}" readonly="readonly" /></td>
+					<td>Age:<input name="display_age_again" type="text" th:value="${age}" readonly="readonly" /></td>
+					<td>Email:<input name="display_email_again" type="text" th:value="${email}" readonly="readonly" /></td>
+					<td>Country:<input name="display_country_again" type="text" th:value="${country}" readonly="readonly" /></td>
+				</tr>				
+			</thead>
+		</table>
+	</div>
+</body>
+</html>

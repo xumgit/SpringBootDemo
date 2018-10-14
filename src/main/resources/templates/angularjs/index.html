@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>AngularJs</title>
+<link rel="stylesheet" type="text/css" href="/angular-1.7.3/StudyAngularJS.css">
+<script type="text/javascript" src="/angular-1.7.3/angular-1.7.3/angular.min.js"></script>
+<script type="text/javascript" src="/angular-1.7.3/angular-1.7.3/angular-animate.min.js"></script>
+<script type="text/javascript" src="/angular-1.7.3/angular-1.7.3/angular-route.min.js"></script>
+<script type="text/javascript" src="/angular-1.7.3/StudyAngularJS.js"></script>
+</head>
+<body ng-app="myApps">
+	<div ng-controller="myCtrl1">
+    		<input ng-model="name">
+    		<h1>{{greeting}}</h1>
+    		<button ng-click='sayHello()'>点我</button>
+    		<div>Name: {{printName() | reverse}}</div> 
+    		<ul>
+  			<li ng-repeat="n in names | orderBy:'country'">
+    				{{ n.name + ', ' + n.country }}
+  			</li>
+		</ul> 
+		<div>{{localurl}}</div>
+	</div>
+	<div ng-controller="myCtrl2">     
+    		{{first}}<br />              
+    		{{$root.rootVar}}<br />              
+	</div>
+	<div ng-controller="myCtrl3">      
+    		{{second}}<br />            
+    		{{$root.rootVar}}       
+	</div>
+	<div ng-controller="myCtrl4">
+		status={{status}} <br />
+		time={{theTime}} <br />
+		customerService={{customer}} <br />
+	</div>
+	<div ng-controller="myCtrl5">      
+    		<div>
+    			<select ng-model="selectedSite1" ng-init="selectedSite1 = sites1[0].url">
+				<option  ng-repeat="x in sites1" value="{{x.url}}">{{x.site}}</option>
+			</select>
+			<h1>你选择的是: {{selectedSite1}}</h1>
+		</div> 
+		<div>
+			<select ng-model="selectedSite2" ng-options="x.site for x in sites1">
+			</select>
+			<h1>你选择的是: {{selectedSite2.site}}</h1>
+			<p>网址为: {{selectedSite2.url}}</p>
+		</div>    
+		<div>
+			<select ng-model="selectedSite3" ng-options="x for (x, y) in sites2">
+			</select>
+			<h1>你选择的值是: {{selectedSite3}}</h1>
+		</div> 
+		<div>
+			<select ng-model="selectedCar" ng-options="y.brand for (x, y) in cars">
+			</select>
+			<h1>你选择的值是: {{selectedCar.brand}}-{{selectedCar.model}}-{{selectedCar.color}}</h1>
+		</div> 
+	</div>
+	<div ng-controller="myCtrl6">
+		<table id="authorInfo">
+			<tr>
+				<th>Index</th>
+				<th>Name</th>
+				<th>Age</th>
+				<th>Email</th>
+				<th>Country</th>
+			</tr>
+  			<tr ng-repeat="x in authorInfo | orderBy : 'country'">
+  				<td>{{ $index + 1 }}</td>
+    				<td>{{ x.name }}</td>
+    				<td>{{ x.age }}</td>
+    				<td>{{ x.email }}</td>
+    				<td>{{ x.country | uppercase }}</td>
+  			</tr>
+		</table>
+	</div>
+	<div ng-controller="myCtrl7" ng-init="mySwitch=true;hour=13">
+		<p>
+			<button ng-disabled="mySwitch">点我!</button>
+		</p>
+		<p>
+			<input type="checkbox" ng-model="mySwitch">按钮
+		</p>
+		<p>
+			{{ mySwitch }}
+		</p>
+		<p ng-show="true">show我是可见的。</p>
+		<p ng-show="false">show我是不可见的。</p>
+		<p ng-show="hour > 12">hour我是可见的。</p>
+		<p ng-hide="true">hide我是不可见的。</p>
+		<p ng-hide="false">hide我是可见的。</p>
+		
+		<button ng-click="toggle()">隐藏/显示</button>
+		<p ng-hide="myVar">
+			名: <input type="text" ng-model="firstName"><br>
+			姓: <input type="text" ng-model="lastName"><br>
+		<br />
+		Full Name: {{firstName + " " + lastName}}
+		</p>
+	</div>
+	<div>
+		元素名: <runoob-directive></runoob-directive> <br />
+		属性: <div runoob-directive></div>
+		类名: <div class="runoob-directive">
+		注释: <!-- directive: runoob-directive -->
+	</div>
+	<div ng-controller="myCtrl8">
+		<form novalidate>
+			First Name: <input type="text" ng-model="firstname"> <br />
+			Check to show a header: <input type="checkbox" ng-model="myVar"> <br />
+			选择一个选项:
+    				<input type="radio" ng-model="mySelectVar" value="dogs">Dogs
+    				<input type="radio" ng-model="mySelectVar" value="tuts">Tutorials
+    				<input type="radio" ng-model="mySelectVar" value="cars">Cars <br />
+    			<select ng-model="mySelectVar">
+    				<option value=""></option>
+    				<option value="dogs">Dogs</option>
+    				<option value="tuts">Tutorials</option>
+    				<option value="cars">Cars</option>
+			</select> <br />
+			First Name:<input type="text" ng-model="user.first"><br />
+    			Last Name:<input type="text" ng-model="user.last"><br />
+    			<button ng-click="reset()">RESET</button>
+		</form>
+		<h3>You entered: {{firstname}}</h3>
+		<div ng-hide="myVar" id="ngAnimate">My Header</div>
+		<h3>You select: {{mySelectVar}}</h3>
+		<p>form = {{user}}</p>
+  		<p>master = {{master}}</p>
+	</div>
+	<div ng-controller="myCtrl9">
+		<!-- 
+			$dirty	表单有填写记录
+			$pristine	表单没有填写记录
+			$valid	字段内容合法的
+			$invalid	字段内容是非法的
+		-->
+		<h2>Validation Example</h2>
+		<form name="myForm" novalidate>		
+			<p>用户名:<br>
+			  <input type="text" name="user" ng-model="user" required>
+			  <span style="color:red" ng-show="myForm.user.$dirty && myForm.user.$invalid">
+			  <span ng-show="myForm.user.$error.required">用户名是必须的。</span>
+			  </span>
+			</p>			
+			<p>邮箱:<br>
+			  <input type="email" name="email" ng-model="email" required>
+			  <span style="color:red" ng-show="myForm.email.$dirty && myForm.email.$invalid">
+			  <span ng-show="myForm.email.$error.required">邮箱是必须的。</span>
+			  <span ng-show="myForm.email.$error.email">非法的邮箱。</span>
+			  </span>
+			</p>			
+			<p>
+			  <input type="submit"
+			  ng-disabled="myForm.user.$dirty && myForm.user.$invalid ||
+			  myForm.email.$dirty && myForm.email.$invalid">
+			</p>		
+		</form>
+	</div>
+	<div ng-controller="myCtrl10">
+		<p>{{ x1 }}</p>
+		<p>{{ x2 }}</p>
+		<p ng-switch = "x3">
+      		是不是字符串：
+      		<label ng-switch-when = "true">是</label>
+      		<label ng-switch-when = "false">不是</label>
+      		<label ng-switch-when = ""></label>
+  		</p>
+	</div>
+	<div ng-controller="myCtrl11">
+		<p>输入一个数字: <input type = "number" ng-model = "number" /></p>
+		<button ng-click = "square()">X<sup>2</sup></button>
+		<p>结果: {{result}}</p>
+	</div>
+	<div class="ng-scope">
+		<script type="text/ng-template" id="embedded.home.html">
+			<h1> Home </h1>
+		</script>
+		<script type="text/ng-template" id="embedded.about.html">
+			<h1> About </h1>
+		</script>
+		<div> 
+			<div id="navigation">  
+				<a href="#!/home">Home</a>
+				<a href="#!/about">About</a>
+			</div>      
+	    		<div ng-view=""></div>
+	    </div>
+	</div>
+</body>
+</html>

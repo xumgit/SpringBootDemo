@@ -13,6 +13,7 @@ public class RedisService {
 
 	/*  first start redis server
 	 *  start-command: redis-server
+	 *  connect: redis-cli -n 127.0.0.1 -p 6379 
 	 *  end-command: ctrl+c
 	*/
 	

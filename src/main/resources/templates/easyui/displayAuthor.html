@@ -1,0 +1,29 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<title>displayAuthorInfo</title>
+</head>
+<body>
+	<div id="data">
+		<table id="grid-data">
+			<thead>
+				<tr>
+					<td><input id="display_authorId" type="text" th:value="${authorId}" style="display:none;"/></td>
+				</tr>
+				<tr>
+					<td>Name:<input id="display_name" type="text" th:value="${name}" /></td>
+				</tr>	
+				<tr>
+					<td>Age:<input id="display_age" type="text" th:value="${age}" /></td>
+				</tr>	
+				<tr>
+					<td>Email:<input id="display_email" type="text" th:value="${email}" /></td>
+				</tr>	
+				<tr>
+					<td>Country:<input id="display_country" type="text" th:value="${country}" /></td>
+				</tr>				
+			</thead>
+		</table>
+	</div>
+</body>
+</html>
