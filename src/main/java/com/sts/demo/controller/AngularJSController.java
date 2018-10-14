@@ -61,4 +61,10 @@ public class AngularJSController {
 		return data.toString();
 	}
 	
+	@RequestMapping(value="/login")
+	public String login() {
+		LOG.info("login");
+		return "angularjs/login";
+	}
+	
 }

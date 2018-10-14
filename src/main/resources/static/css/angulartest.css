@@ -1,0 +1,23 @@
+@charset "UTF-8";
+
+div#login {
+   background-color: #eeeeee;
+}
+
+div#login .form-signin {
+   max-width: 300px;
+   padding: 10px;
+   margin: 0 auto; 
+}
+
+div#login .form-signin-heading {
+    text-align: center;
+}
+
+div#login table td {
+    padding: 5px;
+}
+
+div#login input {
+    margin-bottom: 5px;
+}
