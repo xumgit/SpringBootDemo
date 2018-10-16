@@ -14,7 +14,7 @@
 <script type="text/javascript" src="/js/angularTest.js"></script>
 </head>
 <body ng-app="myAugular">
-    <div class="container" id="login" ng-controller="loginController">
+    <div class="container" id="login" ng-controller="loginController" ng-init="init()">
         <form class="form-signin" role="form">
             <table>
                 <caption class="form-signin-heading"><h2>Welcome Login</h2></caption>
@@ -27,8 +27,12 @@
                     <td><input type="password" name="password" ng-model="user.userPassword" class="form-control" placeholder="Please enter password" required /></td>
                 </tr>
                 <tr>
+                    <td><img alt="vefifyCode" ng-click="changeCaptcha()" ng-src="{{captchaUrl}}" /></td>
+                    <td><input ttype="text" ng-model="user.captchaguid" placeholder="Please enter verify code" required/ ></td>
+                </tr>
+                <tr>
                     <td colspan="2">
-                        <input type="checkbox" value="Remeber-me" ng-model="user.remeberMe" ng-change="remeberChange()"/> Remeber me
+                        <input type="checkbox" value="Remeber-me" ng-model="user.remeberMe" ng-true-value="true" ng-false-value="false" ng-change="remeberChange()"/> Remeber me
                     </td>
                 </tr>
                 <tr>

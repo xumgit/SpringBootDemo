@@ -1,8 +1,14 @@
 package com.sts.demo.controller;
 
-import java.util.HashMap;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 import java.util.Map;
+
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.sts.demo.service.AuthorService;
@@ -24,6 +31,9 @@ public class AngularJSController {
 	
 	@Autowired
 	private AuthorService authorService;
+	
+	@Autowired
+	DefaultKaptcha defaultKaptcha;
 	
 	@RequestMapping(value="/index")
 	public String index() {
@@ -66,5 +76,49 @@ public class AngularJSController {
 		LOG.info("login");
 		return "angularjs/login";
 	}
+	
+	@RequestMapping(value="/defaultKaptcha")
+	public void defaultKaptcha(HttpServletRequest httpServletRequest, 
+			HttpServletResponse httpServletResponse) throws Exception {
+		 byte[] captchaChallengeAsJpeg = null;  
+	     ByteArrayOutputStream jpegOutputStream = new ByteArrayOutputStream();  
+	     try {  
+	         String createText = defaultKaptcha.createText();
+	         httpServletRequest.getSession().setAttribute("vrifyCode", createText);
+             BufferedImage challenge = defaultKaptcha.createImage(createText);
+             ImageIO.write(challenge, "jpg", jpegOutputStream);
+	     } catch (IllegalArgumentException e) {  
+	         httpServletResponse.sendError(HttpServletResponse.SC_NOT_FOUND);  
+	         return;  
+	     } 
+	   
+	     captchaChallengeAsJpeg = jpegOutputStream.toByteArray();  
+	     httpServletResponse.setHeader("Cache-Control", "no-store");  
+	     httpServletResponse.setHeader("Pragma", "no-cache");  
+	     httpServletResponse.setDateHeader("Expires", 0);  
+	     httpServletResponse.setContentType("image/jpeg");  
+	     ServletOutputStream responseOutputStream =  httpServletResponse.getOutputStream();  
+	     responseOutputStream.write(captchaChallengeAsJpeg);  
+	     responseOutputStream.flush();  
+	     responseOutputStream.close();  
+	}
+
+	@RequestMapping(value="/imgverifyControllerDefaultKaptcha")
+	@ResponseBody
+	public String imgvrifyControllerDefaultKaptcha(HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse){
+		 String status = "{\"status\":\"success\"}";
+		 String captchaId = (String) httpServletRequest.getSession().getAttribute("vrifyCode");  
+		 String parameter = httpServletRequest.getParameter("vrifyCode");
+		 LOG.info("Session  vrifyCode=" + captchaId + ",form vrifyCode=" + parameter);
+		 
+		if (!captchaId.equals(parameter)) {
+			status = "{\"status\":\"failed\"}";
+		} 
+		
+		return status;
+	}
+
+
 	
 }
