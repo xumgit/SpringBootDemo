@@ -40,6 +40,11 @@ public class AngularJSController {
 		return "angularjs/index";
 	}
 	
+	@RequestMapping(value="/error")
+	public String loginError() {
+		return "angularjs/error";
+	}
+	
 	@RequestMapping(value="/getdata")
 	@ResponseBody
 	public String getData(@RequestParam(value="id", required=false) Integer id,
@@ -109,14 +114,18 @@ public class AngularJSController {
 			HttpServletResponse httpServletResponse){
 		 String status = "{\"status\":\"success\"}";
 		 String captchaId = (String) httpServletRequest.getSession().getAttribute("vrifyCode");  
+		 String userName = httpServletRequest.getParameter("userName");
+		 String password = httpServletRequest.getParameter("password");
 		 String parameter = httpServletRequest.getParameter("vrifyCode");
+		 LOG.info("userName="+userName+",password="+password);
 		 LOG.info("Session  vrifyCode=" + captchaId + ",form vrifyCode=" + parameter);
 		 
-		if (!captchaId.equals(parameter)) {
-			status = "{\"status\":\"failed\"}";
-		} 
-		
-		return status;
+		 if (!"admin".equalsIgnoreCase(userName) || !"123456".equalsIgnoreCase(password)
+				 || (captchaId != null && !captchaId.equalsIgnoreCase(parameter))) {
+				status = "{\"status\":\"failed\"}";
+		 }
+		 		
+		 return status;
 	}
 
 

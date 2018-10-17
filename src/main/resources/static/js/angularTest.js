@@ -4,7 +4,18 @@
 
 var myAugulars = angular.module('myAugular', ['ngAnimate','ngRoute','ngCookies']);
 
-myAugulars.factory('locals', ['$window', function($window){
+myAugulars.config(['$locationProvider', function($locationProvider) {   
+    $locationProvider.hashPrefix(''); 
+}])
+.config(["$routeProvider", function($routeProvider) {
+    $routeProvider.when("/loginSuccess",{
+        redirectTo: "/angularjs/index",
+        controller: "loginController"
+    }).when("/loginError",{
+        redirectTo: "/angularjs/error",
+        controller: "loginController"
+    });
+}]).factory('locals', ['$window', function($window){
                    return{
                       set: function(key, value){
                         $window.localStorage[key] = value;
@@ -21,8 +32,8 @@ myAugulars.factory('locals', ['$window', function($window){
                     };
                  }]);
 
-myAugulars.controller('loginController', ['$scope', '$rootScope', '$http', 'locals', 
-    function($scope, $rootScope, $http, locals) {
+myAugulars.controller('loginController', ['$scope', '$rootScope', '$http', '$location', 'locals', 
+    function($scope, $rootScope, $http, $location, locals) {
     $scope.user = {userName:'', userPassword:'', remeberMe:false, kaptcha:'', captchaguid:''}; 
     $scope.captchaUrl = "/angularjs/defaultKaptcha";
     $scope.login = function() {
@@ -33,10 +44,18 @@ myAugulars.controller('loginController', ['$scope', '$rootScope', '$http', 'loca
             method: "GET",
             url: "/angularjs/imgverifyControllerDefaultKaptcha",
             params: {
+                "userName": $scope.user.userName,
+                "password": $scope.user.userPassword,
                 "vrifyCode": $scope.user.captchaguid
             }
         }).then(function(response){
-            console.log("response status=" + response.data.status);
+            var isLoginSuccess = response.data.status;
+            console.log("isLoginSuccess=" + isLoginSuccess);
+            if (isLoginSuccess == "success") {
+                $location.path("/loginSuccess");
+            } else {
+                $location.path("/loginError");
+            }
         });
     } 
     $scope.init = function() {
