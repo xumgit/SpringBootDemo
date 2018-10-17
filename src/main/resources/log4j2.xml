@@ -33,7 +33,7 @@
       <Console name="Console" target="SYSTEM_OUT">
         <!--输出日志的格式-->
         <PatternLayout
-           pattern="[%date{yyyy-MM-ddHH:mm:ss.SSS}][%thread][%level][%class][%line]:%message%n" />
+           pattern="[%date{yyyy-MM-dd HH:mm:ss.SSS}][%thread][%level][%class][%line]:%message%n" />
       </Console>
 
       <!-- info及以上级别的信息, 每次大小超过size, 则这size大小的日志会自动存入按年份-月份建立的文件夹下面并进行压缩, 作为存档-->

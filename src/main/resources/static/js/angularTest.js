@@ -28,6 +28,16 @@ myAugulars.controller('loginController', ['$scope', '$rootScope', '$http', 'loca
     $scope.login = function() {
         console.log("$scope.user.userName=" + $scope.user.userName);
         console.log("$scope.user.userPassword=" + $scope.user.userPassword);
+        console.log("$scope.user.captchaguid=" + $scope.user.captchaguid);
+        $http({
+            method: "GET",
+            url: "/angularjs/imgverifyControllerDefaultKaptcha",
+            params: {
+                "vrifyCode": $scope.user.captchaguid
+            }
+        }).then(function(response){
+            console.log("response status=" + response.data.status);
+        });
     } 
     $scope.init = function() {
         var u = locals.getObject("loginUser");
@@ -44,19 +54,7 @@ myAugulars.controller('loginController', ['$scope', '$rootScope', '$http', 'loca
         console.log("checked=" + $scope.user.remeberMe);
         //locals.setObject("remeberMe", $event.target.checked);
         //$scope.user.remeberMe = !($scope.user.remeberMe);
-        //$scope.user.userPassword = "";
-        console.log("$scope.user.captchaguid=" + $scope.user.captchaguid);
-        $http({
-            method: "GET",
-            url: "/angularjs/imgverifyControllerDefaultKaptcha",
-            params: {
-                "vrifyCode": $scope.user.captchaguid
-            }
-        }).then(function(response){
-            console.log("success response=" + response);
-        }).then(function(response){
-            console.log("error response=" + response);
-        });
+        //$scope.user.userPassword = "";       
         if ($scope.user.remeberMe) {
             locals.setObject("loginUser", $scope.user);
         } else {
