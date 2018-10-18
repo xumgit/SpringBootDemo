@@ -52,10 +52,12 @@ myAugulars.controller('loginController', ['$scope', '$rootScope', '$http', '$loc
             var isLoginSuccess = response.data.status;
             console.log("isLoginSuccess=" + isLoginSuccess);
             if (isLoginSuccess == "success") {
-                $location.path("/loginSuccess");
+                $location.path("/loginSuccess");             
             } else {
                 $location.path("/loginError");
             }
+            var curUrl = $location.absUrl();
+            console.log("curUrl="+curUrl);
         });
     } 
     $scope.init = function() {
