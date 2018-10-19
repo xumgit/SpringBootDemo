@@ -52,13 +52,17 @@ myAugulars.controller('loginController', ['$scope', '$rootScope', '$http', '$loc
             var isLoginSuccess = response.data.status;
             console.log("isLoginSuccess=" + isLoginSuccess);
             if (isLoginSuccess == "success") {
-                $location.path("/loginSuccess");             
+                window.location.href = "/angularjs/success";
+                //$location.path("/loginSuccess");             
             } else {
-                $location.path("/loginError");
+                window.location.href = "/angularjs/error";
+                //$location.path("/loginError");
             }
             var curUrl = $location.absUrl();
             console.log("curUrl="+curUrl);
-        });
+        }).catch(function(data){
+		    console.log("catch data=" + data);
+	    });
     } 
     $scope.init = function() {
         var u = locals.getObject("loginUser");

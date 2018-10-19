@@ -45,6 +45,11 @@ public class AngularJSController {
 		return "angularjs/error";
 	}
 	
+	@RequestMapping(value="/success")
+	public String loginSuccess() {
+		return "angularjs/bootstrapAndAngular";
+	}
+	
 	@RequestMapping(value="/getdata")
 	@ResponseBody
 	public String getData(@RequestParam(value="id", required=false) Integer id,

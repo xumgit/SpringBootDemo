@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>BootStrapAndAngular</title>
+<script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="/js/loader.min.js"></script>
+
+<link rel="stylesheet" href="/bootstrap337/css/bootstrap.min.css"/>
+<script type="text/javascript" src="/bootstrap337/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" href="/dist/jquery.bootgrid.min.css"/>
+<script type="text/javascript" src="/dist/jquery.bootgrid.min.js"></script>
+<script type="text/javascript" src="/dist/jquery.bootgrid.fa.min.js"></script>
+
+<link rel="stylesheet" href="/bootstrap-select-1.12.4/css/bootstrap-select.min.css"/>
+<script type="text/javascript" src="/bootstrap-select-1.12.4/js/bootstrap-select.min.js"></script>
+
+<link rel="stylesheet" href="/bootstrap-switch/css/bootstrap3/bootstrap-switch.min.css"/>
+<script type="text/javascript" src="/bootstrap-switch/js/bootstrap-switch.min.js"></script>
+
+<script type="text/javascript" src="/js/moderniz.2.8.1.js"></script>
+<script type="text/javascript" src="/js/keyboardEvent.js"></script>
+
+<link rel="stylesheet" href="/toastmessage/css/jquery.toastmessage.css"/>
+<script type="text/javascript" src="/toastmessage/jquery.toastmessage.js"></script>
+
+<link rel="stylesheet" href="/jqueryui1121custom/jquery-ui.min.css"/>
+<link rel="stylesheet" href="/jqueryui1121custom/jquery-ui.theme.min.css"/>
+<script src="/jqueryui1121custom/jquery-ui.min.js"></script>
+
+<script type="text/javascript" src="/angular-1.7.3/angular-1.7.3/angular.min.js"></script>
+<script type="text/javascript" src="/angular-1.7.3/angular-1.7.3/angular-animate.min.js"></script>
+<script type="text/javascript" src="/angular-1.7.3/angular-1.7.3/angular-route.min.js"></script>
+<script type="text/javascript" src="/angular-1.7.3/angular-1.7.3/angular-cookies.min.js"></script>
+<script type="text/javascript" src="/js/bootStrapAndAngular.js"></script>
+</head>
+<body ng-app="angularDataApp">
+	<div id="data">
+		<table id="author-grid-data" class="table table-condensed table-hover table-striped" ng-controller="authorlistController" ng-init="initData()">
+			<thead>
+				<tr>
+					<th data-column-id="add" data-align="center" data-formatter="add"></th>
+					<th data-column-id="id" data-order="desc" data-type="numeric">ID</th>
+					<th data-column-id="name">Name</th>
+					<th data-column-id="age" data-order="desc">Age</th>
+					<th data-column-id="email" data-formatter="email" data-sortable="false">Email</th>
+					<th data-column-id="country" data-sortable="false">Country</th>
+					<th data-column-id="clone" data-width="100px" data-height="70px" data-align="center" data-sortable="false">Clone</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</body>
+</html>
