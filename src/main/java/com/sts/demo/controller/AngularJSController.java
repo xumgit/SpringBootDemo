@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.sts.demo.pojo.Author;
 import com.sts.demo.service.AuthorService;
 
 @Controller
@@ -48,6 +49,35 @@ public class AngularJSController {
 	@RequestMapping(value="/success")
 	public String loginSuccess() {
 		return "angularjs/bootstrapAndAngular";
+	}
+	
+	@RequestMapping(value="/updatedata")
+	@ResponseBody
+	public String updateData(@RequestParam(value="id", required=false, defaultValue="0") Integer id,
+			@RequestParam(value="name", required=false) String name,
+			@RequestParam(value="age", required=false) Integer age) {
+		String status = "{\"status\": \"failed\"}";
+		
+		LOG.info("id="+id+",name="+name+",age="+age);
+		
+		int affectRow = -1;
+		if (id != 0) {
+			Author author = new Author();
+			author.setId(id);
+			if (name != null) {
+				author.setName(name);
+			}
+			if (age != null) {
+				author.setAge(age);
+			}
+			affectRow = authorService.updateByPrimaryKeySelective(author);
+		}
+		LOG.info("affectRow=" + affectRow);
+		if (affectRow > 0) {
+			status = "{\"status\": \"success\"}";
+		} 
+		
+		return status;
 	}
 	
 	@RequestMapping(value="/getdata")

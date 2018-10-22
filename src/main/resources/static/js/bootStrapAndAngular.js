@@ -34,7 +34,29 @@ angularDataApp.config(['$locationProvider', function($locationProvider) {
 
 angularDataApp.controller('authorlistController', ['$scope', '$rootScope', '$http', '$location', 'locals', 
     function($scope, $rootScope, $http, $location, locals) {
+    $scope.saveAgeData = function(event) {
+        console.log("age="+$(event).val()+",id="+$(event).attr("id"));
+        $http({
+            method: "POST",
+            url: "/angularjs/updatedata",
+            params: {
+                "id": $(event).attr("id"),
+                "age": $(event).val()
+            }
+        }).then(function(response){
+            var updateStatus = response.data.status;
+            console.log("updateStatus=" + updateStatus);
+        }).catch(function(data){
+		    console.log("catch data=" + data);
+	    });
+    } 
     $scope.initData = function() {
+        $("#author-grid-data").on("initialize.rs.jquery.bootgrid", function (e) {
+          
+        }).on("initialized.rs.jquery.bootgrid", function (e) {
+        	
+        });
+        
         $("#author-grid-data").bootgrid({
             ajax: true,
             rowCount: [5, 10, 15, 20],
@@ -54,13 +76,17 @@ angularDataApp.controller('authorlistController', ['$scope', '$rootScope', '$htt
                 {
                     return "<button id=\"expland_" + row.id + "\" class=\"expland_" + row.id + "\" data=" + row.add + " row-id=\"" + row.id +"\"></button>";
                 },
+                "age": function(column, row)
+                {
+                    return "<input id=" + row.id + "  value=\"" + row.age + "\" onchange=\"angular.element(this).scope().saveAgeData(this)\">";
+                },
                 "email": function(column, row)
                 {
                     return "<a href=\"#\">" + column.id + ": " + row.id + ": " + row.email + "</a>";
                 }
             }
         }).on("loaded.rs.jquery.bootgrid",function(){
-            console.log("loaded");                    
+            console.log("loaded");                               
 		    $("span.fa-refresh").parent().css({"height": "34px", "width": "50px"});
 		    $("span.dropdown-text").parent().css({"height": "34px", "width": "50px"});
 		    $("button[title='Refresh']").html("<span class=\"icon fa fa-refresh\"></span><span class=\"glyphicon glyphicon-refresh\"></span>");
@@ -69,6 +95,6 @@ angularDataApp.controller('authorlistController', ['$scope', '$rootScope', '$htt
             console.log("selected="+$(this).data("row-id"));
         }).on("deselected.rs.jquery.bootgrid", function(e, rows){
             console.log("deselected");
-        });
-    }  
+        });  
+    }    
 }]);
