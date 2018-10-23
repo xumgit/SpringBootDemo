@@ -83,6 +83,15 @@ angularDataApp.controller('authorlistController', ['$scope', '$rootScope', '$htt
                 "email": function(column, row)
                 {
                     return "<a href=\"#\">" + column.id + ": " + row.id + ": " + row.email + "</a>";
+                },
+                "command": function(column, row) 
+                {
+                    var div = '<a flag="true" style="padding-right: 0px;"><span class="glyphicon glyphicon-download" style="font-size:18px;display:none;"></span></a>&nbsp;' +
+					'<a style="padding-right: 0px;"><span class="glyphicon glyphicon-trash" style="color:rgb(212, 106, 64);font-size:18px;"></span></a>&nbsp;' +
+					'<a flag="true" style="padding-right: 0px;"><span class="glyphicon glyphicon-refresh" style="font-size:18px;"></span></a>&nbsp;' +
+					'<a flag="true" type="tv" style="padding-right: 0px;"><span class="glyphicon glyphicon-repeat" style="font-size:18px;"></span></a>' +
+					'<a style="padding-right: 0px;"><span class="glyphicon glyphicon-stop"style="color:rgb(212, 106, 64);display:none;font-size:18px;"></a>';
+                    return div;
                 }
             }
         }).on("loaded.rs.jquery.bootgrid",function(){
