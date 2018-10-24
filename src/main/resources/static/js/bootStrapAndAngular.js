@@ -50,6 +50,9 @@ angularDataApp.controller('authorlistController', ['$scope', '$rootScope', '$htt
 		    console.log("catch data=" + data);
 	    });
     } 
+    $scope.downloadData = function(event) {
+        console.log("download something,id=" + $(event).attr("rowid"));
+    }
     $scope.initData = function() {
         $("#author-grid-data").on("initialize.rs.jquery.bootgrid", function (e) {
           
@@ -57,7 +60,7 @@ angularDataApp.controller('authorlistController', ['$scope', '$rootScope', '$htt
         	
         });
         
-        $("#author-grid-data").bootgrid({
+        var authorGridData = $("#author-grid-data").bootgrid({
             ajax: true,
             rowCount: [5, 10, 15, 20],
             post: function ()
@@ -86,11 +89,11 @@ angularDataApp.controller('authorlistController', ['$scope', '$rootScope', '$htt
                 },
                 "command": function(column, row) 
                 {
-                    var div = '<a flag="true" style="padding-right: 0px;"><span class="glyphicon glyphicon-download" style="font-size:18px;display:none;"></span></a>&nbsp;' +
-					'<a style="padding-right: 0px;"><span class="glyphicon glyphicon-trash" style="color:rgb(212, 106, 64);font-size:18px;"></span></a>&nbsp;' +
-					'<a flag="true" style="padding-right: 0px;"><span class="glyphicon glyphicon-refresh" style="font-size:18px;"></span></a>&nbsp;' +
-					'<a flag="true" type="tv" style="padding-right: 0px;"><span class="glyphicon glyphicon-repeat" style="font-size:18px;"></span></a>' +
-					'<a style="padding-right: 0px;"><span class="glyphicon glyphicon-stop"style="color:rgb(212, 106, 64);display:none;font-size:18px;"></a>';
+                    var div = '<a id="download_'+row.id+'" rowid="'+row.id+'"><span class="glyphicon glyphicon-download" style="font-size:18px;"></span></a>&nbsp;' +
+					          '<a><span class="glyphicon glyphicon-trash" style="color:rgb(212, 106, 64);font-size:18px;"></span></a>&nbsp;' +
+					          '<a><span class="glyphicon glyphicon-refresh" style="font-size:18px;"></span></a>&nbsp;' +
+					          '<a><span class="glyphicon glyphicon-repeat" style="font-size:18px;"></span></a>&nbsp' +
+					          '<a><span class="glyphicon glyphicon-stop"style="color:rgb(212, 106, 64);font-size:18px;"></a>';
                     return div;
                 }
             }
@@ -99,7 +102,10 @@ angularDataApp.controller('authorlistController', ['$scope', '$rootScope', '$htt
 		    $("span.fa-refresh").parent().css({"height": "34px", "width": "50px"});
 		    $("span.dropdown-text").parent().css({"height": "34px", "width": "50px"});
 		    $("button[title='Refresh']").html("<span class=\"icon fa fa-refresh\"></span><span class=\"glyphicon glyphicon-refresh\"></span>");
-		    $("<span class=\"glyphicon glyphicon-list\"></span>").appendTo(".fa-th-list");
+            $("<span class=\"glyphicon glyphicon-list\"></span>").appendTo(".fa-th-list");
+            authorGridData.find("[id^='download_']").on("click",function(e){
+					$scope.downloadData(this);
+			}).end();
         }).on("selected.rs.jquery.bootgrid", function(e, rows){
             console.log("selected="+$(this).data("row-id"));
         }).on("deselected.rs.jquery.bootgrid", function(e, rows){
