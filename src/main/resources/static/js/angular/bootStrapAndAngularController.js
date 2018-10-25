@@ -2,56 +2,16 @@
  * 
  */
 
-var angularDataApp = angular.module('angularDataApp', ['ngAnimate','ngRoute','ngCookies']);
-
-angularDataApp.config(['$locationProvider', function($locationProvider) {   
-    $locationProvider.hashPrefix(''); 
-}])
-.config(["$routeProvider", function($routeProvider) {
-    $routeProvider.when("/loginSuccess",{
-        redirectTo: "/angularjs/index",
-        controller: "authorlistController"
-    }).when("/loginError",{
-        redirectTo: "/angularjs/error",
-        controller: "authorlistController"
-    });
-}]).factory('locals', ['$window', function($window){
-                   return{
-                      set: function(key, value){
-                        $window.localStorage[key] = value;
-                      },
-                      get: function(key, defaultValue){
-                        return  $window.localStorage[key] || defaultValue;
-                      },
-                      setObject: function(key, value){
-                        $window.localStorage[key] = JSON.stringify(value);
-                      },
-                      getObject: function(key) {
-                        return JSON.parse($window.localStorage[key] || '{}');
-                      }
-                    };
-                 }]);
-
-angularDataApp.controller('authorlistController', ['$scope', '$rootScope', '$http', '$location', 'locals', 
-    function($scope, $rootScope, $http, $location, locals) {
-    $scope.saveAgeData = function(event) {
-        console.log("age="+$(event).val()+",id="+$(event).attr("id"));
-        $http({
-            method: "POST",
-            url: "/angularjs/updatedata",
-            params: {
-                "id": $(event).attr("id"),
-                "age": $(event).val()
-            }
-        }).then(function(response){
-            var updateStatus = response.data.status;
-            console.log("updateStatus=" + updateStatus);
-        }).catch(function(data){
-		    console.log("catch data=" + data);
-	    });
+angularDataApp.controller('authorlistController', ['$scope', '$rootScope', '$http', 'Configure', 'bootStrapAndAngularService', '$location', 'locals', 
+    function($scope, $rootScope, $http, Configure, bootStrapAndAngularService, $location, locals) {
+    $scope.saveAgeData = function(obj) {
+        console.log("age="+$(obj).val()+",id="+$(obj).attr("id"));
+        bootStrapAndAngularService.update(obj).then(function(result){
+            console.log("result:"+result);
+        });
     } 
-    $scope.downloadData = function(event) {
-        console.log("download something,id=" + $(event).attr("rowid"));
+    $scope.downloadData = function(obj) {
+        console.log("download something,id=" + $(obj).attr("rowid"));
     }
     $scope.initData = function() {
         $("#author-grid-data").on("initialize.rs.jquery.bootgrid", function (e) {
