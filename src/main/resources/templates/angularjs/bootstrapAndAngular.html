@@ -29,6 +29,8 @@
 <link rel="stylesheet" href="/jqueryui1121custom/jquery-ui.theme.min.css"/>
 <script src="/jqueryui1121custom/jquery-ui.min.js"></script>
 
+<link rel="stylesheet" href="/css/bootStrapAndAngular.css" />
+
 <script type="text/javascript" src="/angular-1.7.3/angular-1.7.3/angular.min.js"></script>
 <script type="text/javascript" src="/angular-1.7.3/angular-1.7.3/angular-animate.min.js"></script>
 <script type="text/javascript" src="/angular-1.7.3/angular-1.7.3/angular-route.min.js"></script>
@@ -43,12 +45,14 @@
 </head>
 <body ng-app="angularDataApp">
 	<div id="data">
-		<table id="author-grid-data" class="table table-condensed table-hover table-striped" ng-controller="authorlistController" ng-init="initData()">
+		<table id="author-grid-data" class="table table-condensed table-hover table-striped" 
+			   ng-controller="authorlistController" ng-init="initData()">
 			<thead>
 				<tr>
 					<th data-column-id="add" data-align="center" data-formatter="add"></th>
 					<th data-column-id="id" data-order="desc" data-type="numeric">ID</th>
 					<th data-column-id="name">Name</th>
+					<th data-column-id="header" data-formatter="headerImg">Image</th>
 					<th data-column-id="age" data-formatter="age" data-order="desc">Age</th>
 					<th data-column-id="email" data-formatter="email" data-sortable="false">Email</th>
 					<th data-column-id="country" data-sortable="false">Country</th>
@@ -56,6 +60,39 @@
 				</tr>
 			</thead>
 		</table>
+	</div>
+	<div class="modal fade" id="showModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" 
+	     aria-hidden="true" ng-controller="authorlistController">
+		<div class="modal_wrapper">
+			<div class="modal-dialog">
+			    <div class="modal-content">
+			        <div class="modal-header" style="background:rgb(28, 148, 196);">
+			            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+			                  		&times;
+			            </button>
+					    <h4 class="modal-title" style="color: #fff;" id="myModalLabel">
+					               Test Content
+					    </h4>
+			        </div>
+					<div class="modal-body" style="height:200px;">
+						<accordion>
+        					<expander class='expander' ng-repeat='expander in expanders' expander-title='expander.title'>
+            					{{expander.text}}
+        					</expander>
+    					</accordion>
+			        </div>
+			        <div class="modal-footer">
+						 <button type="button" id="okButton" ng-click="okButtonFun()" 
+						         class="btn btn-primary" style="width:50px;">
+			            	ok
+			            </button>
+			        	<button type="button" class="btn btn-default" 
+			            	data-dismiss="modal" style="width:50px;">close
+			            </button>
+			        </div>
+			    </div>
+			</div>
+		</div>	
 	</div>
 </body>
 </html>

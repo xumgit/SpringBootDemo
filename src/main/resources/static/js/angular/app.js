@@ -6,6 +6,7 @@
  .constant('Configure', {
     URLBase:'/',
     uploadUrlBase:'http://localhost:8080/',
+    ImgUrl:'/images/touxiang.jpg',
     Language:{
         "lengthMenu": "row",
         "paginate": {

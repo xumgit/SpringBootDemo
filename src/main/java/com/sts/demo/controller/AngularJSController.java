@@ -80,6 +80,16 @@ public class AngularJSController {
 		return status;
 	}
 	
+	@RequestMapping(value="/deletedata")
+	@ResponseBody
+	public String deleteData(@RequestParam(value="id", required=false, defaultValue="0") Integer id) {
+		String status = "{\"status\": \"failed\"}";		
+		LOG.info("id="+id);		
+		status = "{\"status\": \"success\"}";
+		
+		return status;
+	}
+
 	@RequestMapping(value="/getdata")
 	@ResponseBody
 	public String getData(@RequestParam(value="id", required=false) Integer id,

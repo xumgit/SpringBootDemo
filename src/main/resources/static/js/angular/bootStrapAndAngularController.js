@@ -4,15 +4,35 @@
 
 angularDataApp.controller('authorlistController', ['$scope', '$rootScope', '$http', 'Configure', 'bootStrapAndAngularService', '$location', 'locals', 
     function($scope, $rootScope, $http, Configure, bootStrapAndAngularService, $location, locals) {
+    $scope.title = '点击展开';
+    $scope.text = '这里是内部的内容。';
+    $scope.expanders = [{
+        title : 'Click me to expand',
+        text : 'Hi there folks, I am the content that was hidden but is now shown.'
+    }, {
+        title : 'Click this',
+        text : 'I am even better text than you have seen previously'
+    }, {
+        title : 'Test',
+        text : 'test'
+    }];
+
     $scope.saveAgeData = function(obj) {
         console.log("age="+$(obj).val()+",id="+$(obj).attr("id"));
         bootStrapAndAngularService.update(obj).then(function(result){
             console.log("result:"+result);
         });
     } 
+    
     $scope.downloadData = function(obj) {
         console.log("download something,id=" + $(obj).attr("rowid"));
+        $("#showModal").modal("show");
     }
+
+    $scope.okButtonFun = function() {
+        $("#showModal").modal("hide");
+    }
+
     $scope.initData = function() {
         $("#author-grid-data").on("initialize.rs.jquery.bootgrid", function (e) {
           
@@ -42,6 +62,10 @@ angularDataApp.controller('authorlistController', ['$scope', '$rootScope', '$htt
                 "age": function(column, row)
                 {
                     return "<input id=" + row.id + "  value=\"" + row.age + "\" onchange=\"angular.element(this).scope().saveAgeData(this)\">";
+                },
+                "headerImg": function(column, row)
+                {
+                    return "<img id=" + row.id + " src=\"" + Configure.ImgUrl + "\" width=\"30px\" height=\"30px\"></img>";
                 },
                 "email": function(column, row)
                 {
