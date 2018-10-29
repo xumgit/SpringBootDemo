@@ -1,9 +1,10 @@
 /**
  * 
  */
+//http://www.angularjsapi.cn/#/show/copy
 
-angularDataApp.controller('authorlistController', ['$scope', '$rootScope', '$http', 'Configure', 'bootStrapAndAngularService', '$location', 'locals', 
-    function($scope, $rootScope, $http, Configure, bootStrapAndAngularService, $location, locals) {
+angularDataApp.controller('authorlistController', ['$scope','$log', '$rootScope', '$http', 'Configure', 'bootStrapAndAngularService', '$location', 'locals', 
+    function($scope, $log, $rootScope, $http, Configure, bootStrapAndAngularService, $location, locals) {
     $scope.title = '点击展开';
     $scope.text = '这里是内部的内容。';
     $scope.expanders = [{
@@ -16,7 +17,12 @@ angularDataApp.controller('authorlistController', ['$scope', '$rootScope', '$htt
         title : 'Test',
         text : 'test'
     }];
-
+    $scope.result = "";
+    $scope.myStyle = {
+             "color" : "black",
+             "font-size" : "18px",
+             "margin" : "15px"
+    }
     $scope.saveAgeData = function(obj) {
         console.log("age="+$(obj).val()+",id="+$(obj).attr("id"));
         bootStrapAndAngularService.update(obj).then(function(result){
@@ -33,9 +39,24 @@ angularDataApp.controller('authorlistController', ['$scope', '$rootScope', '$htt
         $("#showModal").modal("hide");
     }
 
+    $scope.testAngularApiFun = function() {
+        var log = [];
+        var values = { name: 'misko', gender: 'male' };
+        angular.forEach(values, function (value, key) {
+            this.push(key + ':' + value);
+        }, log);
+        $scope.result = log.join(",");
+        $log.info("dd="+$scope.dd);
+    }
+    //$scope.testAngularApiFun();
+
     $scope.initData = function() {
         $("#author-grid-data").on("initialize.rs.jquery.bootgrid", function (e) {
-          
+            $log.info('info log');
+			//$log.warn('warn log');
+			//$log.error('error log');
+			//$log.log('log log');
+			//$log.debug('debug log');
         }).on("initialized.rs.jquery.bootgrid", function (e) {
         	
         });
@@ -82,7 +103,7 @@ angularDataApp.controller('authorlistController', ['$scope', '$rootScope', '$htt
                 }
             }
         }).on("loaded.rs.jquery.bootgrid",function(){
-            console.log("loaded");                               
+            console.log("loaded");                              
 		    $("span.fa-refresh").parent().css({"height": "34px", "width": "50px"});
 		    $("span.dropdown-text").parent().css({"height": "34px", "width": "50px"});
 		    $("button[title='Refresh']").html("<span class=\"icon fa fa-refresh\"></span><span class=\"glyphicon glyphicon-refresh\"></span>");
