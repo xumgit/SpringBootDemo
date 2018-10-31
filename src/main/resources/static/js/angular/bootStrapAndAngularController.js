@@ -39,15 +39,6 @@ angularDataApp.controller('authorlistController', ['$scope','$log', '$rootScope'
         $("#showModal").modal("hide");
     }
 
-    $scope.testAngularApiFun = function() {
-        var log = [];
-        var values = { name: 'misko', gender: 'male' };
-        angular.forEach(values, function (value, key) {
-            this.push(key + ':' + value);
-        }, log);
-        $scope.result = log.join(",");
-        $log.info("dd="+$scope.dd);
-    }
     //$scope.testAngularApiFun();
 
     $scope.initData = function() {

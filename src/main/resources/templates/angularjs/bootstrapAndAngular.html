@@ -40,6 +40,7 @@
 <script type="text/javascript" src="/js/angular/config.js"></script>
 <script type="text/javascript" src="/js/angular/factory.js"></script>
 <script type="text/javascript" src="/js/angular/directive.js"></script>
+<script type="text/javascript" src="/js/angular/testAngularJsAPI.js"></script>
 <script type="text/javascript" src="/js/angular/bootStrapAndAngularService.js"></script>
 <script type="text/javascript" src="/js/angular/bootStrapAndAngularController.js"></script>
 </head>
@@ -94,9 +95,14 @@
 			</div>
 		</div>	
 	</div>
-	<div ng-controller="authorlistController" ng-style="myStyle">
+	<div ng-controller="testAngularJsAPIController" ng-style="myStyle">
 		<button ng-click="testAngularApiFun()">click</button> <br />
 		Result: <span style="color:red;" ng-bind="result"></span>
+	</div>
+	<div ng-controller="testAngularJsAPIController" ng-style="myStyle">
+		<p>{{master1 | json}}</p>
+		<p>{{user1 | json}}</p>
+		<button ng-click="update()">click</button> <button ng-click="reset()">click</button>		
 	</div>
 </body>
 </html>
