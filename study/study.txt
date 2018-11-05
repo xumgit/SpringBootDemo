@@ -1,1 +1,3 @@
 https://github.com/yyhsong/iAngularJS
+
+https://github.com/monw3c/angularjs_pingan.git
