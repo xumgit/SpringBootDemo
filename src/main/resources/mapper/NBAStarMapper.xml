@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sts.demo.dao.NBAStarMapper" >
+  <resultMap id="BaseResultMap" type="com.sts.demo.pojo.NBAStar" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="number" property="number" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="position" property="position" jdbcType="VARCHAR" />
+    <result column="team" property="team" jdbcType="VARCHAR" />
+    <result column="thumb" property="thumb" jdbcType="VARCHAR" />
+    <result column="votes" property="votes" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, number, name, position, team, thumb, votes
+  </sql>
+  <select id="selectAll" resultType="java.util.Map">
+    select 
+  	<include refid="Base_Column_List" />
+    from nbaStar
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from nbaStar
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from nbaStar
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.sts.demo.pojo.NBAStar" >
+    insert into nbaStar (id, number, name, 
+      position, team, thumb, 
+      votes)
+    values (#{id,jdbcType=INTEGER}, #{number,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+      #{position,jdbcType=VARCHAR}, #{team,jdbcType=VARCHAR}, #{thumb,jdbcType=VARCHAR}, 
+      #{votes,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sts.demo.pojo.NBAStar" >
+    insert into nbaStar
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="number != null" >
+        number,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="position != null" >
+        position,
+      </if>
+      <if test="team != null" >
+        team,
+      </if>
+      <if test="thumb != null" >
+        thumb,
+      </if>
+      <if test="votes != null" >
+        votes,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="number != null" >
+        #{number,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null" >
+        #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="team != null" >
+        #{team,jdbcType=VARCHAR},
+      </if>
+      <if test="thumb != null" >
+        #{thumb,jdbcType=VARCHAR},
+      </if>
+      <if test="votes != null" >
+        #{votes,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sts.demo.pojo.NBAStar" >
+    update nbaStar
+    <set >
+      <if test="number != null" >
+        number = #{number,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null" >
+        position = #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="team != null" >
+        team = #{team,jdbcType=VARCHAR},
+      </if>
+      <if test="thumb != null" >
+        thumb = #{thumb,jdbcType=VARCHAR},
+      </if>
+      <if test="votes != null" >
+        votes = #{votes,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sts.demo.pojo.NBAStar" >
+    update nbaStar
+    set number = #{number,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      position = #{position,jdbcType=VARCHAR},
+      team = #{team,jdbcType=VARCHAR},
+      thumb = #{thumb,jdbcType=VARCHAR},
+      votes = #{votes,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
