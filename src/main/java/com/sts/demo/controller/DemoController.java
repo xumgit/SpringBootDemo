@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.JsonArray;
@@ -28,9 +29,30 @@ public class DemoController {
 		return "demo/index";
 	}
 	
+	@RequestMapping(value="/list")
+	public String list() {
+		return "demo/list";
+	}
+	
+	@RequestMapping(value="/view")
+	public String view() {
+		return "demo/view";
+	}
+	
+	@RequestMapping(value="/add")
+	public String add() {
+		return "demo/add";
+	}
+	
+	@RequestMapping(value="/edit")
+	public String edit() {
+		return "demo/edit";
+	}
+	
 	@RequestMapping(value="/getData")
 	@ResponseBody
-	public String getData() {
+	public String getData(@RequestParam(value="playerId", required=false, defaultValue="0") Integer playerId) {
+		LOG.info("playerId:" + playerId);
 		JsonObject data = new JsonObject();
 		JsonArray array = new JsonArray();
 		List<Map<String, Object>> nbaStar = null;

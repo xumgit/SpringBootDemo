@@ -1,7 +1,7 @@
 //List Controller
 function playerListCtrl($scope, $http) {
-	$http.get("demo/getData").success(function(data) {
-		$scope.players = data.rows;
+	$http.get("/demo/getData").then(function(data) {
+		$scope.players = data.data.rows;
 	});
 	$scope.orderProp = "-votes"; //默认按票数降序排列
 	
@@ -62,11 +62,15 @@ function playerEditCtrl($scope, $http, $routeParams, $location) {
 	];
 	//初始化球队信息
 	$scope.teams = ["骑士","勇士","尼克斯","快船","火箭","篮网","公牛","雷霆"];
-	
+	console.log("playerId:" + $routeParams.playerId);
 	//获取被编辑的球员信息
-	$http.get("data/players.json").success(function(data) {
+	$http.get("/demo/getData",{
+		params:{  
+        	"playerId": $routeParams.playerId  
+	    }
+	}).then(function(data) {
 		var i = parseInt($routeParams.playerId)-1;
-		$scope.player = data[i];
+		$scope.player = data.data.rows[i];
 	});
 	
 	//提交表单

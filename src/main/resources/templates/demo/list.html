@@ -33,7 +33,7 @@
 			</thead>
 			<tbody>
 				<tr ng-repeat="player in players | filter:queryVal | orderBy:orderProp">
-					<td><img ng-src="static/img/players/{{player.thumb}}" class="pure-img" /></td>
+					<td><img ng-src="/demo/img/players/{{player.thumb}}" class="pure-img" /></td>
 					<td><a href="#/player/view/{{player.id}}">{{player.name}}</a></td>
 					<td>{{player.position | posFilter}}</td>
 					<td>{{player.num}}</td>
