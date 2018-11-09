@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.sts.demo.pojo.NBAStar;
 import com.sts.demo.service.NBAStarService;
 
 @Controller
@@ -47,6 +48,51 @@ public class DemoController {
 	@RequestMapping(value="/edit")
 	public String edit() {
 		return "demo/edit";
+	}
+	
+	@RequestMapping(value="/update")
+	@ResponseBody
+	public String update(@RequestParam(value="id", required=false, defaultValue="-1") Integer id,
+			@RequestParam(value="number", required=false) Integer number,
+			@RequestParam(value="thumb", required=false) String thumb,
+			@RequestParam(value="name", required=false) String name,
+			@RequestParam(value="votes", required=false) Integer votes,
+			@RequestParam(value="position", required=false) String position,
+			@RequestParam(value="team", required=false) String team) {
+		String status = "{\"status\":\"failed\"}";
+		LOG.info("id:" + id + ",number:" + number + ",votes:" + votes + ",team:" + team);
+		LOG.info("thumb:" + thumb + ",name:" + name + ",position:" + position);
+		
+		if (id != -1) {
+			NBAStar nbaStar = new NBAStar();
+			nbaStar.setId(id);
+			if (number != null) {
+				nbaStar.setNumber(number);
+			}
+			if (thumb != null) {
+				nbaStar.setThumb(thumb);
+			}
+			if (name != null) {
+				nbaStar.setName(name);
+			}
+			if (votes != null) {
+				nbaStar.setVotes(votes);
+			}
+			if (position != null) {
+				nbaStar.setPosition(position);
+			}
+			if (team != null) {
+				nbaStar.setTeam(team);
+			}
+			int affectRow = nbaStarService.updateByPrimaryKeySelective(nbaStar);
+			if (affectRow > 0) {
+				status = "{\"status\":\"success\"}";
+			}
+		} else {
+			LOG.error("id have some error");
+		}
+		
+		return status;
 	}
 	
 	@RequestMapping(value="/getData")

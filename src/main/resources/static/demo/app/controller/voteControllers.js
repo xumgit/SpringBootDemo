@@ -61,7 +61,7 @@ function playerEditCtrl($scope, $http, $routeParams, $location) {
 		{val:"C",txt:"中锋"}
 	];
 	//初始化球队信息
-	$scope.teams = ["骑士","勇士","尼克斯","快船","火箭","篮网","公牛","雷霆"];
+	$scope.teams = ["骑士","勇士","尼克斯","快船","火箭","篮网","公牛","雷霆","湖人"];
 	console.log("playerId:" + $routeParams.playerId);
 	//获取被编辑的球员信息
 	$http.get("/demo/getData",{
@@ -75,12 +75,24 @@ function playerEditCtrl($scope, $http, $routeParams, $location) {
 	
 	//提交表单
 	$scope.submitForm = function() {
-		//console.log("Submit Player Form: ", angular.toJson($scope.player));
-		$http.post("/backend/acitonUrl", $scope.player).then(function(resp) { //无论是否保存成功，都进行页面跳转
-			console.log("Saved Successfully! Status: " + resp.status);
+		console.log("Submit Player Form: ", angular.toJson($scope.player));
+		$http({
+			method: "post",
+			url: "/demo/update",
+			params: {
+				"id": $scope.player.id,
+				"number": $scope.player.number,
+				"thumb": $scope.player.thumb,
+				"name": $scope.player.name,
+				"votes": $scope.player.votes,
+				"position": $scope.player.position,
+				"team": $scope.player.team
+			}
+		}).then(function(resp) {
+			console.log("Saved Successfully! Status: " + resp.status + ",status:" + resp.data.status);
 			$location.path("#/player/list");
 		}, function(resp) {
-			console.log("Saved Failly! Status: " + resp.status);
+			console.log("Saved Failly! Status: " + resp.status + ",status:" + resp.data.status);
 			$location.path("#/player/list");
 		});
 	};

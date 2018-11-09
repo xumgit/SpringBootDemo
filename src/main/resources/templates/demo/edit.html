@@ -14,7 +14,7 @@
 		
 		<div class="pure-control-group">
 			<label>号码</label>
-			<input type="text" name="num" ng-model="player.num" required val-player-num />
+			<input type="text" name="number" ng-model="player.number" required val-player-num />
 			<span class="val-error" ng-show="playerForm.num.$touched && playerForm.num.$invalid">
 				<span ng-show="playerForm.num.$error.required">必须填写球员号码</span>
 				<span ng-show="playerForm.num.$error.playerNum">球员号码必须是0~99之间的整数</span>
