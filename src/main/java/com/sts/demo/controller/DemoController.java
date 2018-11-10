@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -97,7 +98,7 @@ public class DemoController {
 	
 	@RequestMapping(value="/getData")
 	@ResponseBody
-	public String getData(@RequestParam(value="playerId", required=false, defaultValue="0") Integer playerId) {
+	public String getData(@RequestParam(value="playerId", required=false, defaultValue="-1") Integer playerId) {
 		LOG.info("playerId:" + playerId);
 		JsonObject data = new JsonObject();
 		JsonArray array = new JsonArray();
@@ -115,6 +116,83 @@ public class DemoController {
 		
 		LOG.info("data:" + data.toString());
 		return data.toString();
+	}
+	
+	@RequestMapping(value="/getOneData")
+	@ResponseBody
+	public String getOneDataById(@RequestParam(value="playerId", required=false, defaultValue="-1") Integer playerId) {
+		JsonArray array = new JsonArray();
+		LOG.info("playerId:" + playerId);
+		
+		if (playerId != -1) {
+			List<Map<String, Object>> nbaStar = null;
+			nbaStar = nbaStarService.selectByPrimaryKeyAnother(playerId);
+			JsonObject jsonObj = null;
+			for (Map<String, Object> kv : nbaStar) { 
+				jsonObj = new JsonObject();
+				for (Map.Entry<String, Object> entry : kv.entrySet()) {
+					jsonObj.addProperty(entry.getKey(), String.valueOf(entry.getValue()));
+				}
+				array.add(jsonObj);
+			}
+		}
+		
+		LOG.info("array:" + array.toString());
+		return array.toString();
+	}
+	
+	@RequestMapping(value="/deleteOneData")
+	@ResponseBody
+	public String deleteOneDataById(@RequestParam(value="playerId", required=false, defaultValue="-1") Integer playerId) {
+		String status = "{\"status\":\"success\"}";
+		
+		if (playerId != -1) {
+			int affectRow = nbaStarService.deleteByPrimaryKey(playerId);
+			//int affectRow = 1; // just test, not need delete data
+			if (affectRow < 0) {
+				status = "{\"status\":\"failed\"}";
+			} 
+		} else {
+			status = "{\"status\":\"failed\"}";
+		}
+		
+		return status;
+	}
+	
+	@RequestMapping(value="/addManyData")
+	@ResponseBody
+	public String addManyData(@RequestBody List<NBAStar> nbaStars) {
+		String status = "{\"status\":\"failed\"}";
+		
+		if (nbaStars != null) {
+			
+			int affectRow = nbaStarService.insertManyData(nbaStars);
+			if (affectRow > 0) {
+				status = "{\"status\":\"success\"}";
+			}
+		} else {
+			LOG.error("nbaStars have some error");
+		}
+		
+		return status;
+	}
+	
+	@RequestMapping(value="/addOneData")
+	@ResponseBody
+	public String addOneData(@RequestBody NBAStar nbaStar) {
+		String status = "{\"status\":\"failed\"}";
+		
+		if (nbaStar != null) {
+			LOG.info("id:" + nbaStar.getId() + ",name:" + nbaStar.getName());
+			int affectRow = nbaStarService.insertOneData(nbaStar);
+			if (affectRow > 0) {
+				status = "{\"status\":\"success\"}";
+			}
+		} else {
+			LOG.error("nbaStar have some error");
+		}
+		
+		return status;
 	}
 	
 }

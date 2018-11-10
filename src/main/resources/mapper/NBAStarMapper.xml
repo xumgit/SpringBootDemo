@@ -24,11 +24,18 @@
     from nbaStar
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="selectByPrimaryKeyAnother" resultType="java.util.Map" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from nbaStar
+    where id = #{id,jdbcType=INTEGER}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from nbaStar
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.sts.demo.pojo.NBAStar" >
+  <insert id="insert" useGeneratedKeys="true"
+    keyProperty="id" parameterType="com.sts.demo.pojo.NBAStar" >
     insert into nbaStar (id, number, name, 
       position, team, thumb, 
       votes)
@@ -36,6 +43,15 @@
       #{position,jdbcType=VARCHAR}, #{team,jdbcType=VARCHAR}, #{thumb,jdbcType=VARCHAR}, 
       #{votes,jdbcType=INTEGER})
   </insert>
+  <insert id="insertMany" useGeneratedKeys="true"
+    keyProperty="id" parameterType="java.util.List">
+  	insert into nbaStar (id, number, name, position, team, thumb, votes) values
+  	<foreach item="item" collection="list" separator=",">
+    	(#{id,jdbcType=INTEGER}, #{number,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+        #{position,jdbcType=VARCHAR}, #{team,jdbcType=VARCHAR}, #{thumb,jdbcType=VARCHAR}, 
+        #{votes,jdbcType=INTEGER})
+  	</foreach>
+  </insert> 
   <insert id="insertSelective" parameterType="com.sts.demo.pojo.NBAStar" >
     insert into nbaStar
     <trim prefix="(" suffix=")" suffixOverrides="," >

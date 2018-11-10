@@ -1,11 +1,12 @@
 //自定义Service
 angular.module("voteApp").service("voteSer", ["$q", "$http", function($q, $http) {
 	this.getPlayerNames = function() {
-		return $http.get("data/players.json").then(function(resp) {
+		return $http.get("/demo/getData").then(function(resp) {
 			if(typeof resp.data === "object") {
 				var playerNames = [];
 				angular.forEach(resp.data, function(v, k) {
-					playerNames.push(v.name.toLowerCase());
+					//playerNames.push(angular.$$lowercase(v.name));
+					playerNames.push(v.name);
 				});
 				return playerNames;
 			}else {

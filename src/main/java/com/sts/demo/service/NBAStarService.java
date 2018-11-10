@@ -22,9 +22,33 @@ public class NBAStarService {
 		return nbaStar;
 	}
 	
+	public List<Map<String, Object>> selectByPrimaryKeyAnother(Integer id) {
+		List<Map<String, Object>> nbaStar = null;
+		nbaStar = this.nBAStarMapper.selectByPrimaryKeyAnother(id);
+		return nbaStar;
+	}
+	
 	public int updateByPrimaryKeySelective(NBAStar nbaStar) {
 		int affectRow = -1;
 		affectRow = this.nBAStarMapper.updateByPrimaryKeySelective(nbaStar);
+		return affectRow;
+	}
+	
+	public int deleteByPrimaryKey(Integer id) {
+		int affectRow = -1;
+		affectRow = this.nBAStarMapper.deleteByPrimaryKey(id);
+		return affectRow;
+	}
+	
+	public int insertOneData(NBAStar nbaStar) {
+		int affectRow = -1;
+		affectRow = this.nBAStarMapper.insert(nbaStar);
+		return affectRow;
+	}
+	
+	public int insertManyData(List<NBAStar> nbaStars) {
+		int affectRow = -1;
+		affectRow = this.nBAStarMapper.insertMany(nbaStars);
 		return affectRow;
 	}
 	

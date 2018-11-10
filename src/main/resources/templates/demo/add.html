@@ -15,10 +15,14 @@
 		
 		<div class="pure-control-group">
 			<label>号码</label>
-			<input type="text" name="num" ng-model="player.num" required val-player-num />
-			<span class="val-error" ng-show="playerForm.num.$touched && playerForm.num.$invalid">
-				<span ng-show="playerForm.num.$error.required">必须填写球员号码</span>
-				<span ng-show="playerForm.num.$error.playerNum">球员号码必须是0~99之间的整数</span>
+			<select name="number" ng-model="player.number" required val-player-num>
+				<option ng-repeat="n in numbers" value="{{n}}">{{n}}</option>
+			</select>
+			<!-- <input type="text" name="number" ng-model="player.number" required val-player-number /> -->
+			<span class="val-error" ng-show="playerForm.number.$touched && playerForm.number.$invalid">
+				<span ng-show="playerForm.number.$error.required">必须填写球员号码</span>
+				<span ng-show="playerForm.number.$error.number">只能输入数字</span>
+				<span ng-show="playerForm.number.$error.playerNum">球员号码必须是0~99之间的整数</span>
 			</span>
 		</div>
 		
@@ -42,7 +46,17 @@
 		
 		<div class="pure-control-group">
 			<label>头像</label>
-			<input type="file" name="thumb" ng-model="player.thumb" />
+			<input type="file" name="thumb" ng-model="player.thumb" onchange='angular.element(this).scope().fileChanged(this)'/>
+		</div>
+		
+		<div class="pure-control-group">
+			<label>票数</label>
+			<input type="number" name="votes" ng-model="player.votes" required val-player-votes/>
+			<span class="val-error" ng-show="playerForm.votes.$touched && playerForm.votes.$invalid">
+				<span ng-show="playerForm.votes.$error.required">必须填写票数</span>
+				<span ng-show="playerForm.votes.$error.number">只能输入数字</span>
+				<span ng-show="playerForm.votes.$error.playerVotes">票数必须是1000~4999之间的整数</span>
+			</span>
 		</div>
 		
 		<div class="pure-controls">
