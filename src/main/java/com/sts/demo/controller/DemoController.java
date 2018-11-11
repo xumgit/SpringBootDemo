@@ -1,5 +1,6 @@
 package com.sts.demo.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,7 +23,24 @@ import com.sts.demo.service.NBAStarService;
 public class DemoController {
 	
 	private static final Logger LOG = LogManager.getLogger(DemoController.class);
-	
+	private static Map<String, String> testPage = new HashMap<String, String>();
+	static {
+		testPage.put("ajax", "demo/test/ajax");
+		testPage.put("binding", "demo/test/binding");
+		testPage.put("directive", "demo/test/directive");
+		testPage.put("event", "demo/test/event");
+		testPage.put("expression", "demo/test/expression");
+		testPage.put("filter", "demo/test/filter");
+		testPage.put("form", "demo/test/form");
+		testPage.put("http", "demo/test/http");
+		testPage.put("injector", "demo/test/injector");
+		testPage.put("model", "demo/test/model");
+		testPage.put("module", "demo/test/module");
+		testPage.put("promise", "demo/test/promise");
+		testPage.put("scope", "demo/test/scope");
+		testPage.put("select", "demo/test/select");
+		testPage.put("service", "demo/test/service");
+	}
 	@Autowired
 	private NBAStarService nbaStarService;
 	
@@ -193,6 +211,20 @@ public class DemoController {
 		}
 		
 		return status;
+	}
+	
+	@RequestMapping(value="/angularTest")
+	public String angularTest(@RequestParam(value="test", required=false, defaultValue="index") String test) {
+		String url = "";
+		LOG.info("test:" + test);
+		
+		if (testPage != null && testPage.containsKey(test)) {
+			url = testPage.get(test);
+		} else {
+			url = "demo/test/index";
+		}
+		
+		return url;
 	}
 	
 }

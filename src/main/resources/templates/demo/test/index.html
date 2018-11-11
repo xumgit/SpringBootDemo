@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+
+<html ng-app="mainApp">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>AngularJS Test Main</title>
+		<style type="text/css">
+			.test-div {
+				font-size: 30px;
+				margin: 15px;
+				padding: 15px;
+				width: 500px;
+				border: 1px solid red;
+				text-align: center;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="test-div" ng-controller="mainCtrl">
+			<button ng-click="appTest('ajax')">ajax</button> &nbsp
+			<button ng-click="appTest('binding')">binding</button> &nbsp
+			<button ng-click="appTest('directive')">directive</button> &nbsp
+			<button ng-click="appTest('event')">event</button> &nbsp
+			<button ng-click="appTest('expression')">expression</button> &nbsp <br />
+			<button ng-click="appTest('filter')">filter</button> &nbsp
+			<button ng-click="appTest('form')">form</button> &nbsp
+			<button ng-click="appTest('http')">http</button> &nbsp
+			<button ng-click="appTest('injector')">injector</button> &nbsp
+			<button ng-click="appTest('model')">model</button> &nbsp <br />
+			<button ng-click="appTest('module')">module</button> &nbsp
+			<button ng-click="appTest('promise')">promise</button> &nbsp
+			<button ng-click="appTest('scope')">scope</button> &nbsp
+			<button ng-click="appTest('select')">select</button> &nbsp
+			<button ng-click="appTest('service')">service</button> &nbsp
+		</div>
+		
+		<script type="text/javascript" src="/demo/js/angular.js"></script>
+		<script type="text/javascript">		
+			var mainApp = angular.module("mainApp", []);
+			mainApp.controller("mainCtrl", function($scope) {
+				$scope.appTest = function(test) {
+					window.location.href = "/demo/angularTest?test=" + test;
+				}
+			});
+		</script>
+	</body>
+</html> 
